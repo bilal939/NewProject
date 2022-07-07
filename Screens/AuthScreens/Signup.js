@@ -12,18 +12,13 @@ import React, {useState, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
 const Width = Dimensions.get('window').width;
 import * as actiontypes from '../Actions/Actiontypes';
-import { SignupAction } from '../Actions/Action'
+import { LoginAction, SignupAction } from '../Actions/Action'
 import { AuthReducer } from '../Actions/Reducer';
 const Height = Dimensions.get('window').height;
 const Globalstyle = require('../Styles/GlobalStyles');
 import {connect, useDispatch, useSelector} from 'react-redux';
 const Signup = ({navigation, SignupAction, AuthReducer}) => {
   const dispatch = useDispatch();
-
-  // useEffect(()=>{
-  // dispatch({type:actiontypes.Reset})
-  // },[])
-
   const [Value, SetValue] = useState({Name: '', Email: '', password: ''});
   const [isValid, setvalid] = useState(false);
   const [borderColor, setbordercolor] = useState('#E2E6EB');
@@ -75,6 +70,7 @@ const Signup = ({navigation, SignupAction, AuthReducer}) => {
             const User = {Name, Email, password};
             console.log("user is",User)
             const data = await SignupAction(User);
+           
           } else {
             alert('Password Reqirements not full fill');
           }

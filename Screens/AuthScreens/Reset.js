@@ -20,15 +20,11 @@ const Height = Dimensions.get('window').height;
 
 const Reset = ({navigation, ForgetPassword, AuthReducer}) => {
   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch({type: actiontypes.Reset, isSignUpError: ''});
-  // }, []);
   const [Username, setUsername] = useState('');
   const InputHandle = async () => {
     const EmailRegix = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     if (Username != '') {
       if (EmailRegix.test(Username)) {
-        // const data = await Action(Username) 
         ForgetPassword(Username);
       } else {
         alert('Email Not valid');

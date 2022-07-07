@@ -1,3 +1,4 @@
+import Payee from '../HomeScrens/Payee'
 import * as actionTypes from './Actiontypes'
 const initiallStates = {
     Userdata : '',
@@ -5,7 +6,9 @@ const initiallStates = {
     isSignUpError:'',
     isLoginError:'',
     isForgetPasswordError:'',
-    isloggedin:true
+    isloggedin:'',
+    payedata:[],
+    typeError:''
 }
 
 export const AuthReducer = (state=initiallStates,action)=>{
@@ -50,14 +53,26 @@ export const AuthReducer = (state=initiallStates,action)=>{
         case(actionTypes.LoginFailure):
         return{
             ...state,
-            isLoginError:action.payload,
-            isLoading:false
+            isLoading:false,
+            isloggedin:false
         }
         case(actionTypes.islogout):
         return{
             ...state,
-            isloggedin:false
-            
+            isLoading:false,
+            isloggedin:false,
+        }
+        case(actionTypes.GetAllPayeeType):
+        return{
+            ...state,
+            isLoading:false,
+            payedata:action.payload
+        }
+        case(actionTypes.GetTypeError):
+        return{
+            ...state,
+            isLoading:false,
+            typeError:action.payload
         }
         default:
             return state;

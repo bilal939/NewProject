@@ -9,32 +9,48 @@ import Reset from '../Screens/AuthScreens/Reset';
 import Payee from '../Screens/HomeScrens/Payee';
 import * as actionTypes from '../Screens/Actions/Actiontypes';
 import {useEffect, useState} from 'react';
+import Addpayee from '../Screens/HomeScrens/Addpayee';
 import {AuthReducer} from '../Screens/Actions/Reducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {connect, useDispatch} from 'react-redux';
 const Stack = createNativeStackNavigator();
 
 const Homestack = ({AuthReducer}) => {
+  
+  
   let userToken='';
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const GetToken = async () => {
       try {
-        // userToken =  null;
         userToken = await AsyncStorage.getItem('token');
         console.log('user token', userToken);
+        if (userToken == null) {
+          dispatch({type:actionTypes.islogout})
+        } else {
+          console.log("token milgya")
+          dispatch({type:actionTypes.Login})
+        }
+  
       } catch (e) {
         console.log('error', e);
       }
     };
     GetToken();
-  });
+  },[]);
+
+
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Landing"
+        // initialRouteName="Landing"
         screenOptions={{headerShown: false}}>
-        {userToken !== 'null' && AuthReducer.isloggedin != false ? (
-          <Stack.Screen name="Payee" component={Payee} />
+        {AuthReducer.isloggedin  ? (
+          <>
+          <Stack.Screen   name="Payee" component={Payee} />
+          <Stack.Screen   name="AddPayee" component={Addpayee} /> 
+          </>         
         ) : (
           <>
             <Stack.Screen name="Landing" component={Landing} />
@@ -48,7 +64,7 @@ const Homestack = ({AuthReducer}) => {
   );
 };
 const mapstatestoprops = state =>{
-  console.log(state)
+  // console.log("Home stack state",state)
   return {
    AuthReducer:state
   }

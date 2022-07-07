@@ -18,16 +18,13 @@ const Width = Dimensions.get('window').width;
 const Height = Dimensions.get('window').height;
 import {connect, useDispatch} from 'react-redux';
 
-const Login = ({navigation, AuthReducer, LoginAction}) => {
+const Login = ({navigation, AuthReducer,LoginAction}) => {
   const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   dispatch({type: actiontypes.Reset, isSignUpError: ''});
-  // }, []);
+  const[isloading,setloading]=useState(false)
+  const[ErrorMessage,SeterrorMessage]=useState('')
   const[showpass,setshowpass]=useState(false)
   const[visible , isvisible] = useState(true)
   const [UserField, SetUserField] = useState({Email: '', Password: ''});
-
   const InputHandler = (name, value) => {
     SetUserField({
       ...UserField,
@@ -49,7 +46,17 @@ const Login = ({navigation, AuthReducer, LoginAction}) => {
             const Userdata = {Email, Password};
             console.log('user email', Userdata.Email);
             console.log('user password is', Userdata.Password);
-            const data = await LoginAction(Userdata);
+            const data = await LoginAction(UserField)
+            // console.log("data",data)
+            // (async () => {
+            //   console.log(await LoginAction(UserField))
+            // })().then(async x=>{
+            //   SeterrorMessage(x)
+            //   setloading(true)
+            //   console.log("x is",x)
+            // })
+           
+           
           } else {
             alert('In Valid password');
           }
@@ -125,8 +132,8 @@ const Login = ({navigation, AuthReducer, LoginAction}) => {
           </View>
         </View>
       </View>
-      {AuthReducer.isLoginError !== '' ? (
-        <Text style={Globalstyle.RequestText}>{AuthReducer.isLoginError}</Text>
+      {isloading ? (
+        <Text style={Globalstyle.RequestText}>{ErrorMessage}</Text>
       ) : null}
 
       <View style={Globalstyle.SubmitButtonView}>
@@ -173,9 +180,7 @@ const mapStatestoprop = state => {
 };
 const mapDispatchToprops = dispatch => {
   return {
-    LoginAction: user => {
-      dispatch(LoginAction(user));
-    },
+    LoginAction: user => {dispatch(LoginAction(user));},
   };
 };
 

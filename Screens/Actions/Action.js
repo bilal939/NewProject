@@ -2,9 +2,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as actionTypes from './Actiontypes';
 
 export const SignupAction = User => async dispatch => {
-  console.log("username",User.Name)
-  console.log("password",User.password)
-  console.log("email is",User.Email)
     try {
       dispatch({type:actionTypes.SET_LOADING})
       await fetch(actionTypes.SignupUrl, {
@@ -22,7 +19,7 @@ export const SignupAction = User => async dispatch => {
         const Response =await res.json();
         if(Response.status == 201){
           console.log("status is",Response.status)
-          alert("User Created")
+  
          
           dispatch({type:actionTypes.Signup,payload:User})
         }
@@ -43,9 +40,9 @@ export const SignupAction = User => async dispatch => {
 };
 
 export const LoginAction = User => async dispatch => {
-  dispatch({type:actionTypes.SET_LOADING})
-  dispatch({type:actionTypes.Login})
+  let error='';
   try {
+    dispatch({type:actionTypes.SET_LOADING})
     await fetch(actionTypes.Loginurl, {
       method: 'POST',
       headers: {
@@ -55,30 +52,37 @@ export const LoginAction = User => async dispatch => {
       body: JSON.stringify({
         login_field:User.Email, 
         password:User.Password,
-      }),
+      },
+      console.log("iskabaddd")
+      ),
+      
     }).then(async res => {
       const Response =await res.json();
       const status = await res.status;
-      if(status === 200){
+      if(status === 200){ 
+        console.log("successfull login")
         const token = 'BrytCorp'+ ' '+Response.data.token;
         await AsyncStorage.setItem('token',token)
-
+        dispatch({type:actionTypes.Login})
       }
       else{
-        console.log("resopose",Response)
-        dispatch({
-          type:actionTypes.LoginFailure,
-          payload:Response.description
-        })
+       error=Response.description;
+       console.log("eror",error)
+       dispatch({
+        type:actionTypes.LoginFailure,
+      })
+     
       }
-      
     });
+    
   } catch (error) {
     dispatch({
       type:actionTypes.LoginFailure,
       payload:Response.description
     })
   }
+  return error;
+
 };
 
 
@@ -120,8 +124,8 @@ export const ForgetPassword = User => async dispatch => {
 };
 
 
-export const Logout = ( ) => async dispatch => {
-  dispatch({type:actionTypes.islogout})
+export const Logout = () => async dispatch => {
+  console.log("logout action")
   try {
     const token = await AsyncStorage.getItem('token')
     await fetch(actionTypes.LogoutApi, {
@@ -134,14 +138,17 @@ export const Logout = ( ) => async dispatch => {
     }).then(async res => {
       const Response =await res.json();
       if(Response.status == 200){
-        await AsyncStorage.removeItem('item')
+        console.log("succefully logout")
+        const token =  await AsyncStorage.removeItem("token")
         dispatch({
           type:actionTypes.islogout,
         })
-        dispatch({type:actionTypes.Login})
+
       }
       else{
-        await AsyncStorage.removeItem('item')
+        console.log("Token may be expired")
+        const token =  await AsyncStorage.removeItem("token")
+        // console.log("tookn if ",token)
         dispatch({
           type:actionTypes.islogout,
         })
@@ -157,3 +164,46 @@ export const Logout = ( ) => async dispatch => {
 };
 
 
+export const GetAllPayeeType = () => async dispatch =>{
+  try {
+    console.log("Payee mien aya")
+    const token = await AsyncStorage.getItem('token')
+    await fetch(actionTypes.GetAllPayeeTypeApi,
+    {
+      method:'GET',
+      headers: {
+        Accept: '*/*',
+        'Content-Type': 'application/json',
+        'Authorization':token
+      },
+    }).then(async res=>{
+      const Response =await res.json();
+      
+      const status = await res.status;
+      console.log("Status is",status)
+      console.log("response data is",Response.data)
+      if (status == 200) {
+        console.log("getting all the types")
+        const newarray = [];
+        Response.data.map(item=>{
+          newarray.push(item)
+        })
+        dispatch({
+          type:actionTypes.GetAllPayeeType,
+          payload:newarray
+        })
+      } else {
+        console.log(Response.description)
+        dispatch({
+        type:actionTypes.GetTypeError,
+        payload:Response.description 
+        })
+      }
+    })
+  } catch (error) {
+    dispatch({
+      type:actionTypes.GetTypeError,
+      payload:error
+      })
+  }
+}
