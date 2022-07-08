@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     flexDirection: 'row',
-    borderColor: 'grey',
+    borderColor: '#AAB8DB',
     justifyContent: 'space-between',
   },
   addpayee: {

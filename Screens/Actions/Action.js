@@ -164,8 +164,10 @@ export const Logout = () => async dispatch => {
 };
 
 
-export const GetAllPayeeType = () => async dispatch =>{
+export const GetAllPayeeType = () => async (dispatch) =>{
+  let error = '';
   try {
+    
     console.log("Payee mien aya")
     const token = await AsyncStorage.getItem('token')
     await fetch(actionTypes.GetAllPayeeTypeApi,
@@ -176,34 +178,79 @@ export const GetAllPayeeType = () => async dispatch =>{
         'Content-Type': 'application/json',
         'Authorization':token
       },
-    }).then(async res=>{
-      const Response =await res.json();
+    }).then(res=>{
+      console.log("yahan aya", res.json());
+      return res.json;
+      // const Response =await res.json();
       
-      const status = await res.status;
-      console.log("Status is",status)
-      console.log("response data is",Response.data)
-      if (status == 200) {
-        console.log("getting all the types")
-        const newarray = [];
-        Response.data.map(item=>{
-          newarray.push(item)
-        })
-        dispatch({
-          type:actionTypes.GetAllPayeeType,
-          payload:newarray
-        })
-      } else {
-        console.log(Response.description)
-        dispatch({
-        type:actionTypes.GetTypeError,
-        payload:Response.description 
-        })
-      }
+      // const status = res.status;
+      // console.log("Status is",status)
+      // console.log("response data is",Response.data)
+      // if (status == 200) {
+      //   console.log("getting all the types")
+      //   const newarray = [];
+      //   Response.data.map(item=>{
+      //     newarray.push(item)
+      //   })
+      //   dispatch({
+      //     type:actionTypes.GetAllPayeeType,
+      //     payload:newarray
+      //   })
+      //   return newarray;
+      
+      // } else {
+      //   console.log(Response.description)
+      //   return Response.description;
+        // error = Response.description;
+        // dispatch({
+        // type:actionTypes.GetTypeError,
+        // payload:Response.description 
+        // })
+      // }
     })
   } catch (error) {
     dispatch({
       type:actionTypes.GetTypeError,
       payload:error
       })
+  }
+  return error;
+}
+
+
+export const GetAllBanks = () => async dispatch =>{
+  try {
+    console.log("Banks mien aya")
+    const token = await AsyncStorage.getItem('token')
+    await fetch(actionTypes.GetAllBanks,
+    {
+      method:'GET',
+      headers: {
+        Accept: '*/*',
+        'Content-Type': 'application/json',
+        'Authorization':token
+      },
+    }).then(async res=>{
+      const Response =await res.json();
+      const status = await res.status;
+      console.log("Status of banks is",status)
+      console.log("response data is",Response.data)
+      if (status == 200) {
+        console.log("getting all the Banks")
+        const newarray = [];
+        Response.data.map(item=>{
+          newarray.push(item)
+        })
+        dispatch({
+          type:actionTypes.GetAllBanks,
+          payload:newarray
+        })
+      } else {
+        console.log(Response.description)
+        
+      }
+    })
+  } catch (error) {
+    return error;
   }
 }

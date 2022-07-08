@@ -8,7 +8,7 @@ const initiallStates = {
     isForgetPasswordError:'',
     isloggedin:'',
     payedata:[],
-    typeError:''
+    BankDetails:[],
 }
 
 export const AuthReducer = (state=initiallStates,action)=>{
@@ -68,12 +68,13 @@ export const AuthReducer = (state=initiallStates,action)=>{
             isLoading:false,
             payedata:action.payload
         }
-        case(actionTypes.GetTypeError):
+        case(actionTypes.GetAllBanks):
         return{
             ...state,
             isLoading:false,
-            typeError:action.payload
+            payedata:action.payload
         }
+        
         default:
             return state;
     }

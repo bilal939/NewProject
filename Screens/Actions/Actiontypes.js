@@ -14,3 +14,4 @@ export const LogoutApi = 'https://brytapps.codexnow.com/loginAndRegister/user/pr
 export const GetAllPayeeType = 'Payeetype'
 export const GetAllPayeeTypeApi = 'https://brytapps.codexnow.com/loginAndRegister/list/pay/type';
 export const GetTypeError='GetTypeERROR'
+export const GetAllBanks = 'GetAllBanks'
