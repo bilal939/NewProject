@@ -10,30 +10,30 @@ import {
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import * as actiontypes from '../Actions/Actiontypes';
 import {LoginAction} from '../Actions/Action';
-import {AuthReducer} from '../Actions/Reducer';
 import Globalstyle from '../Styles/GlobalStyles';
-const Width = Dimensions.get('window').width;
 const Height = Dimensions.get('window').height;
-import {connect, useDispatch} from 'react-redux';
+import {connect} from 'react-redux';
 
-const Login = ({navigation, AuthReducer,LoginAction}) => {
-  const dispatch = useDispatch();
+const Login = ({navigation,LoginAction}) => {
+  
+  
   const[isloading,setloading]=useState(false)
   const[ErrorMessage,SeterrorMessage]=useState('')
   const[showpass,setshowpass]=useState(false)
   const[visible , isvisible] = useState(true)
   const [UserField, SetUserField] = useState({Email: '', Password: ''});
+  
   const InputHandler = (name, value) => {
     SetUserField({
       ...UserField,
       [name]: value,
     });
-    if (name == 'Email' && AuthReducer.isLoginError !== '') {
-      dispatch({type: actiontypes.Reset, isLoginError: ''});
+    if (name == 'Email' ) {
+      SeterrorMessage('')
     }
   };
+ 
   const HandleInput = async () => {
     const EmailRegix = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     const PasswordRegix =
@@ -43,19 +43,15 @@ const Login = ({navigation, AuthReducer,LoginAction}) => {
       if (EmailRegix.test(Email)) {
         if (Password != '') {
           if (PasswordRegix.test(Password)) {
-            const Userdata = {Email, Password};
-            console.log('user email', Userdata.Email);
-            console.log('user password is', Userdata.Password);
+            setloading(true)
             const data = await LoginAction(UserField)
-            // console.log("data",data)
-            // (async () => {
-            //   console.log(await LoginAction(UserField))
-            // })().then(async x=>{
-            //   SeterrorMessage(x)
-            //   setloading(true)
-            //   console.log("x is",x)
-            // })
-           
+
+            
+            if(data){
+              console.log("dAT",data)
+              setloading(false)
+              SeterrorMessage(data)
+            }
            
           } else {
             alert('In Valid password');
@@ -70,9 +66,11 @@ const Login = ({navigation, AuthReducer,LoginAction}) => {
       alert('Email Field cannot be empty');
     }
   };
+
+
   return (
     <View style={Globalstyle.Container}>
-      {AuthReducer.isLoading ? (
+      {isloading ? (
         <View style={Globalstyle.ActivityIndicator}>
           <ActivityIndicator size={20} color={'black'} />
           <Text style={{textAlign: 'center'}}>Please Wait</Text>
@@ -133,8 +131,10 @@ const Login = ({navigation, AuthReducer,LoginAction}) => {
         </View>
       </View>
       {isloading ? (
-        <Text style={Globalstyle.RequestText}>{ErrorMessage}</Text>
-      ) : null}
+        null
+      ) : 
+      <Text style={Globalstyle.RequestText}>{ErrorMessage}</Text>
+      }
 
       <View style={Globalstyle.SubmitButtonView}>
         <TouchableOpacity
@@ -172,19 +172,10 @@ const Login = ({navigation, AuthReducer,LoginAction}) => {
     </View>
   );
 };
-const mapStatestoprop = state => {
-  console.log('login state', state);
-  return {
-    AuthReducer: state,
-  };
-};
-const mapDispatchToprops = dispatch => {
-  return {
-    LoginAction: user => {dispatch(LoginAction(user));},
-  };
-};
 
-export default connect(mapStatestoprop, mapDispatchToprops)(Login);
+
+
+export default connect(null, {LoginAction})(Login);
 
 const styles = StyleSheet.create({
   InputFields: {

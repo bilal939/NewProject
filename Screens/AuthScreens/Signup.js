@@ -10,21 +10,20 @@ import {
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
-const Width = Dimensions.get('window').width;
-import * as actiontypes from '../Actions/Actiontypes';
-import { LoginAction, SignupAction } from '../Actions/Action'
-import { AuthReducer } from '../Actions/Reducer';
+import {  SignupAction } from '../Actions/Action'
 const Height = Dimensions.get('window').height;
 const Globalstyle = require('../Styles/GlobalStyles');
-import {connect, useDispatch, useSelector} from 'react-redux';
-const Signup = ({navigation, SignupAction, AuthReducer}) => {
-  const dispatch = useDispatch();
+import {connect} from 'react-redux';
+const Signup = ({navigation, SignupAction,}) => {
+
   const [Value, SetValue] = useState({Name: '', Email: '', password: ''});
   const [isValid, setvalid] = useState(false);
   const [borderColor, setbordercolor] = useState('#E2E6EB');
   const [isuppercase, setuppercase] = useState(false);
   const [isnumber, setnumber] = useState(false);
   const [isspecial, setspecial] = useState(false);
+  const[loading,setloading] = useState(false)
+  const[ErrorMessage,SeterrorMessage] = useState('')
   const uppercase = /(?=.*[A-Z])/;
   const Numberpattern = /.*[0-9].*/;
   const specilpattern = /(?=[^#?!@$%^&*\n-]*[#?!@$%^&*-])/;
@@ -54,9 +53,9 @@ const Signup = ({navigation, SignupAction, AuthReducer}) => {
     } else if (name == 'password') {
       setnumber(false);
     }
-    if (name == 'Email' && AuthReducer.isSignUpError !== '') {
+    if (name == 'Email') {
       setbordercolor('#E2E6EB');
-      dispatch({type: actiontypes.Reset, isSignUpError: ''});
+      SeterrorMessage('')
     }
   };
 
@@ -67,10 +66,15 @@ const Signup = ({navigation, SignupAction, AuthReducer}) => {
       if (Email != '' && EmailRegix.test(Email)) {
         if (password != '') {
           if (password.length >= 8 && uppercase.test(password)) {
+            setloading(true)
             const User = {Name, Email, password};
             console.log("user is",User)
             const data = await SignupAction(User);
-           
+            if (data) {
+              setbordercolor('red');
+              setloading(false)
+              SeterrorMessage(data)
+            } 
           } else {
             alert('Password Reqirements not full fill');
           }
@@ -86,7 +90,7 @@ const Signup = ({navigation, SignupAction, AuthReducer}) => {
   };
   return (
     <View style={Globalstyle.Container}>
-      {AuthReducer.isLoading ? (
+      {loading ? (
         <View style={Globalstyle.ActivityIndicator}>
           <ActivityIndicator size={20} color={'black'} />
           <Text style={{textAlign: 'center'}}>Please Wait</Text>
@@ -148,8 +152,8 @@ const Signup = ({navigation, SignupAction, AuthReducer}) => {
           />
         </View>
       </View>
-      {AuthReducer.isSignUpError !== '' ?
-         <Text style={Globalstyle.RequestText}>{AuthReducer.isSignUpError}</Text> : null}
+      {ErrorMessage !== '' ?
+         <Text style={Globalstyle.RequestText}>{ErrorMessage}</Text> : null}
 
       <View style={styles.ValidationText}>
         <View style={styles.ValidateView}>
@@ -223,20 +227,9 @@ const Signup = ({navigation, SignupAction, AuthReducer}) => {
     </View>
   );
 };
-const mapStatestoprop = state => {
-  console.log("signup state",state)
-  return {
-    AuthReducer: state,
-  };
-};
-const mapDispatchToprops = dispatch => {
-  return {
-    SignupAction: user => {
-      dispatch(SignupAction(user));
-    },
-  };
-};
-export default connect(mapStatestoprop, mapDispatchToprops)(Signup);
+
+
+export default connect(null, {SignupAction})(Signup);
 
 const styles = StyleSheet.create({
   InputFields: {

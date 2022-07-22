@@ -6,7 +6,7 @@ import {createStore, applyMiddleware, combineReducers} from 'redux';
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import { AuthReducer } from './Screens/Actions/Reducer';
-const store = createStore(AuthReducer, applyMiddleware(thunk));
+const store = createStore(AuthReducer,  applyMiddleware(thunk));
 // console.log(JSON.stringify(store.getState()));
 const App = () => {
   useEffect(() => {

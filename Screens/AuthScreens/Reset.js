@@ -14,18 +14,27 @@ import {connect, useDispatch} from 'react-redux';
 import * as actiontypes from '../Actions/Actiontypes'
 import { AuthReducer } from '../Actions/Reducer';
 import { ForgetPassword } from '../Actions/Action';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 const Globalstyle = require('../Styles/GlobalStyles');
 const Width = Dimensions.get('window').width;
 const Height = Dimensions.get('window').height;
 
 const Reset = ({navigation, ForgetPassword, AuthReducer}) => {
-  const dispatch = useDispatch();
+
   const [Username, setUsername] = useState('');
+  const[ErrorMessage, SeterrorMessage] = useState('')
+  const[loading,setloading] = useState(false)
   const InputHandle = async () => {
     const EmailRegix = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     if (Username != '') {
       if (EmailRegix.test(Username)) {
-        ForgetPassword(Username);
+        setloading(true)
+        const data = await ForgetPassword(Username);
+        if(data){
+          console.log("data",data)
+          setloading(false)
+          SeterrorMessage(data)
+        }
       } else {
         alert('Email Not valid');
       }
@@ -86,9 +95,9 @@ const Reset = ({navigation, ForgetPassword, AuthReducer}) => {
             onChangeText={value => setUsername(value)}
           />
         </View>
-        {AuthReducer.isForgetPasswordError ? (
+        {ErrorMessage !== '' ? (
           <Text style={{color: 'red', marginBottom: 10}}>
-            {AuthReducer.isForgetPasswordError}
+            {ErrorMessage}
           </Text>
         ) : null}
         <TouchableOpacity onPress={InputHandle} style={styles.submitt}>
@@ -122,15 +131,9 @@ const mapstatestoprops = state => {
   };
 };
 
-const dispatchstatestoprops = dispatch => {
-  return {
-    ForgetPassword: user => {
-      dispatch(ForgetPassword(user));
-    },
-  };
-};
 
-export default connect(mapstatestoprops, dispatchstatestoprops)(Reset);
+
+export default connect(mapstatestoprops, {ForgetPassword})(Reset);
 
 const styles = StyleSheet.create({
   ResetImageView: {
