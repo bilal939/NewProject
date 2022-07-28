@@ -44,7 +44,6 @@ const Homestack = ({AuthReducer}) => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        // initialRouteName="Landing"
         screenOptions={{headerShown: false}}>
         {AuthReducer.isloggedin  ? (
           <>

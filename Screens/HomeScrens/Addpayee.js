@@ -16,13 +16,18 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {connect} from 'react-redux';
 import {GetAllPayeeType, GetAllBanks} from '../Actions/Action';
 import * as actionTypes from '../Actions/Actiontypes';
-
 const Addpayee = ({navigation, GetAllPayeeType, GetAllBanks, navigate}) => {
+  
   const [Isloading, Set_Loading] = useState(true);
   const [items, setItems] = useState([]);
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState('hsdfuihdui');
-
+  const [value, setValue] = useState('');
+  const [Modelitems, setModelItems] = useState([]);
+  const [Modelopen, setModalOpen] = useState(false);
+  const [Modelvalue, setModalValue] = useState('');
+  const[UtilityText,settext]=useState('');
+  const[placeholderColor,setPlaceHolderColor]=useState('black')
+  const[NewField,setNewFiled]=useState('Select Bank')
   useEffect(() => {
     PayeeData();
   }, []);
@@ -38,7 +43,7 @@ const Addpayee = ({navigation, GetAllPayeeType, GetAllBanks, navigate}) => {
       setItems(Payedata);
     } else {
       Set_Loading(false);
-      alert(Payedata);
+      // navigation.navigate(Login)
     }
   };
   const Typedata = async item => {
@@ -47,6 +52,9 @@ const Addpayee = ({navigation, GetAllPayeeType, GetAllBanks, navigate}) => {
       Set_Loading(true);
       const utility = '?type=utility';
       const type2 = await GetAllBanks(actionTypes.GetAllBanksAPI + utility);
+      settext('Gas, Electric, Phone....')
+      setPlaceHolderColor('#AAB8DB')
+      setNewFiled('Select Utility')
       if (type2) {
         Set_Loading(false);
         console.log(type2);
@@ -57,12 +65,16 @@ const Addpayee = ({navigation, GetAllPayeeType, GetAllBanks, navigate}) => {
       if (type3) {
         Set_Loading(false);
         console.log(type3);
+        settext('')
+        setNewFiled('Select Bank')
       }
     } else {
       const Remaing = await GetAllBanks(actionTypes.GetAllBanksAPI);
       if (Remaing) {
         Set_Loading(false);
         console.log(Remaing);
+        settext('')
+        setNewFiled('Select Bank')
       }
     }
   };
@@ -102,11 +114,12 @@ const Addpayee = ({navigation, GetAllPayeeType, GetAllBanks, navigate}) => {
                 showTickIcon={true}
                 closeAfterSelecting={true}
                 setOpen={setOpen}
-                stickyHeader={true}
+                // stickyHeader={true}
                 onSelectItem={item => {
                   setValue(item.id);
                   Typedata(item.id);
                 }}
+                // zIndexInverse={999}
                 listMode="SCROLLVIEW"
                 scrollViewProps={{
                   nestedScrollEnabled: true,
@@ -118,7 +131,8 @@ const Addpayee = ({navigation, GetAllPayeeType, GetAllBanks, navigate}) => {
                 placeholder="Credit Card , Utility.."
                 setItems={setItems}
                 itemKey="id"
-                listItemContainerStyle={{backgroundColor: 'pink'}}
+                zIndex={3000}
+                zIndexInverse={1000}
                 listItemLabelStyle={{color: '#AAB8DB', padding: 5}}
                 schema={{
                   label: 'type',
@@ -133,9 +147,44 @@ const Addpayee = ({navigation, GetAllPayeeType, GetAllBanks, navigate}) => {
                   marginTop: 10,
                   marginBottom: 10,
                 }}>
-                Select Bank
+                {NewField}
               </Text>
+              <DropDownPicker
+              open={Modelopen}
+              value={Modelvalue}
+              items={Modelitems}
+              setOpen={setModalOpen}
+              setItems={setModelItems}
+              setValue={setModalValue}
+              dropDownContainerStyle={{borderColor: '#AAB8DB'}}
+              style={{borderColor: '#AAB8DB'}}
+              placeholderStyle={{
+              color: placeholderColor, 
+              fontSize: 16
+            }}
+            listMode='MODAL'
+            searchTextInputProps={{
+              maxLength: 10
+            }}     
+            searchPlaceholder="Search..."
+            searchPlaceholderTextColor="grey"
+            searchTextInputStyle={{
+              backgroundColor:'grey'
+            }}
+            placeholder={UtilityText ? UtilityText:'Select Bank'}
+            zIndex={2000}
+            zIndexInverse={2000}
+            modalProps={{
+              animationType: "slide",
               
+            }}
+            modalContentContainerStyle={{
+              margin:20,
+              padding:20,
+              backgroundColor:'transparent',
+              
+            }}
+               />
             </View>
           </View>
         </>
