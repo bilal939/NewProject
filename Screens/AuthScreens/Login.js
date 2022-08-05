@@ -45,8 +45,6 @@ const Login = ({navigation,LoginAction}) => {
           if (PasswordRegix.test(Password)) {
             setloading(true)
             const data = await LoginAction(UserField)
-
-            
             if(data){
               console.log("dAT",data)
               setloading(false)

@@ -36,31 +36,12 @@ export const AuthReducer = (state=initiallStates,action)=>{
             isLoading:false,
             isloggedin:true,
         }
-        case(actionTypes.LoginFailure):
-        return{
-            ...state,
-            isLoading:false,
-            isloggedin:false
-        }
         case(actionTypes.islogout):
         return{
             ...state,
             isLoading:false,
             isloggedin:false,
         }
-        case(actionTypes.GetAllPayeeType):
-        return{
-            ...state,
-            isLoading:false,
-            payedata:action.payload
-        }
-        case(actionTypes.GetAllBanks):
-        return{
-            ...state,
-            isLoading:false,
-            payedata:action.payload
-        }
-        
         default:
             return state;
     }
