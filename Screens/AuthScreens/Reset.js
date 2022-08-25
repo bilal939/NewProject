@@ -10,11 +10,9 @@ import {
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {connect, useDispatch} from 'react-redux';
-import * as actiontypes from '../Actions/Actiontypes'
+import {connect} from 'react-redux';
 import { AuthReducer } from '../Actions/Reducer';
 import { ForgetPassword } from '../Actions/Action';
-import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 const Globalstyle = require('../Styles/GlobalStyles');
 const Width = Dimensions.get('window').width;
 const Height = Dimensions.get('window').height;

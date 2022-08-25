@@ -48,7 +48,6 @@ const Addpayee = ({
   const [checkutility, setcheckutility] = useState('');
   const [Bank, setBank] = useState('Select Bank');
   const [modalVisible, setModalVisible] = useState(false);
-  const [Search, setSearch] = useState('');
   const [FilteredItems, setFilteredItems] = useState([]);
   const [Bankid, setBankid] = useState('');
   const [Tyepid, setTypeid] = useState('');
@@ -107,8 +106,10 @@ const Addpayee = ({
         setModelItems(type2);
       }
     } else {
+      Set_Loading(true);
       const Remaing = await GetAllBanks(actionTypes.GetAllBanksAPI);
       if (Remaing) {
+        Set_Loading(false);
         Set_Loading(false);
         settext('');
         setNewFiled('Select Bank');
@@ -118,17 +119,13 @@ const Addpayee = ({
   };
 
   const SelectBank = item => {
+    console.log("item",item)
     setBank(item.bank_name);
     setBankid(item.id);
-    setModalVisible(!modalVisible);
+    setShowModal(false)
   };
 
-  const ViewModalState = () => {
-    setModalVisible(!modalVisible);
-    setShowModal(true);
-
-  };
-
+ 
   const checkvalidate = async () => {
     if (Tyepid != '') {
       if (Bankid != '' || Utility != '') {
@@ -269,12 +266,13 @@ const Addpayee = ({
                     paddingHorizontal: 10,
                     paddingVertical: 15,
                   }}
-                  onPress={ViewModalState}>
+                onPress={()=>setShowModal(!showModal)}
+                >
                   <Text style={{color: 'black', fontSize: 18}}>{Bank}</Text>
                   <Feather name="chevron-down" color={'black'} size={20} />
                 </Pressable>
               )}
-              {showModal ? <Banklist FilteredItems={FilteredItems} SelectBank={SelectBank} modalVisible={modalVisible} setModalVisible={setModalVisible}   /> : null}
+              {showModal ? <Banklist FilteredItems={FilteredItems} SelectBank={SelectBank}  /> : null}
              
 
               <Text style={styles.sameText}>Enter Payee Name</Text>

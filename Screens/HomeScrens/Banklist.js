@@ -4,16 +4,25 @@ import React from 'react';
 import Entypo from 'react-native-vector-icons/Entypo'
 import { useState } from 'react';
 import { useEffect } from 'react';
-const Banklist = ({FilteredItems,Search,Searchtext,modalVisible,setModalVisible,SelectBank}) => {
-    
-  const [data,setdatabank]=useState([])
-  useEffect(()=>{
-    setdata();
-  })
-  const setdata = () => {
-    setdatabank(FilteredItems)
-    console.log("aidbhik",data)
-  }
+const Banklist = ({FilteredItems,SelectBank}) => {
+  
+  
+  const [modalVisible, setModalVisible] = useState(true);
+  // useEffect(() => {
+  //   if (Modelitems) {
+  //     setFilteredItems([...Modelitems]);
+  //   }
+  // }, [Modelitems]);
+
+  const[Search,setSearchValue]=useState('')
+
+  // useEffect(()=>{
+  //   setdata();
+  // })
+  // const setdata = () => {
+  //   setdatabank(FilteredItems)
+  // }
+
   
   return (
     <>
@@ -55,10 +64,10 @@ const Banklist = ({FilteredItems,Search,Searchtext,modalVisible,setModalVisible,
               onChangeText={val => Searchtext(val)}
             />
           </View>
-          {data.length > 0 ? (
+          {FilteredItems.length > 0 ? (
             <View style={{padding: 10}}>
               <FlatList
-                data={data}
+                data={FilteredItems}
                 style={{height: 580}}
                 showsHorizontalScrollIndicator={true}
                 renderItem={({item}) => (

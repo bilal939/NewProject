@@ -189,7 +189,7 @@ export const GetAllBanks = (item) => async dispatch => {
       const Response = await res.json();
       const status = res.status;
       console.log('Status of banks is', status);
-      console.log('response data is', Response.data);
+      // console.log('response data is', Response.data);
       if (status == 200) {
         console.log('getting all the Banks');
         return Response.data
@@ -212,7 +212,6 @@ export const AddpayeeData = (item) => async dispatch => {
     dispatch({type: actionTypes.SET_LOADING});
     console.log('Add Karaha hun');
     const token = await AsyncStorage.getItem('token');
-    console.log("toekn",token)
     return await fetch(actionTypes.AddPayeeApi
     , {
       method: 'POST',
@@ -250,7 +249,6 @@ export const AddpayeeData = (item) => async dispatch => {
 export const FectchApiPayee = () => async dispatch => {
   try {
     const token = await AsyncStorage.getItem('token');
-    console.log("toekn",token)
     return await fetch(actionTypes.FetchPayeeApi
     , {
       method: 'GET',
@@ -266,7 +264,7 @@ export const FectchApiPayee = () => async dispatch => {
       if (status == 200) {
         return Response.data;
       } else {
-        console.log(Response.description);
+        console.log("gdvghas",Response.description);
         return Response.description;
       }
     });
@@ -306,3 +304,37 @@ export const DeletepayeeeApi = (item) => async dispatch => {
   }
 }
 
+export const UpdatadataPayee = (item,itemdata,bankid) => async dispatch => {
+
+
+  try {
+    const token = await AsyncStorage.getItem('token');
+    return await fetch(item
+    , {
+      method: 'PUT',
+      headers: {
+        Accept: '*/*',
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+      body: JSON.stringify({
+        "payees_name": itemdata.payees_name,
+        "bank":bankid,
+        "account_number":itemdata.account_number
+      }),
+    }
+    ).then(async res => {
+      const Response = await res.json();
+      const status = res.status;
+      console.log("stats is",status)
+      if (status == 200) {
+        console.log("updated data in api",Response.data)
+        return Response.data;
+      } else {
+        return Response.description;
+      }
+    });
+  } catch (error) {
+    return error;
+  }
+};

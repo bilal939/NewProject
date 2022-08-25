@@ -18,15 +18,15 @@ import {
   FectchApiPayee,
   DeletepayeeeApi,
   GetAllBanks,
+  UpdatadataPayee,
 } from '../Actions/Action';
 import {connect, useDispatch} from 'react-redux';
-import Banklist from './Banklist';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import * as actionTypes from '../Actions/Actiontypes';
-import * as actiontypes from '../Actions/Actiontypes';
 import {useFocusEffect} from '@react-navigation/native';
-import Feather from 'react-native-vector-icons/Feather'
+import Feather from 'react-native-vector-icons/Feather';
+import Banklist from './Banklist';
 const Height = Dimensions.get('screen').height;
 const Payee = ({
   Logout,
@@ -34,7 +34,10 @@ const Payee = ({
   FectchApiPayee,
   DeletepayeeeApi,
   GetAllBanks,
+  UpdatadataPayee
 }) => {
+
+
   useFocusEffect(
     React.useCallback(() => {
       FetchData();
@@ -42,45 +45,60 @@ const Payee = ({
   );
 
   useEffect(() => {
-    console.log("jsdfhsu")
     FetchBankType();
   }, []);
- 
-  const[showType,SetBanktype]=(false  )
+  
+  useEffect(()=>{
+    if(Payeedata.length<0){
+      setPayeename('')
+      setAccountNumber('')
+      setbankname('')
+    }
+  },[])
 
-  const FetchBankType = async () => {
-    console.log("FETCH data 232r")
-    const Remaing = await GetAllBanks(actionTypes.GetAllBanksAPI);
-    if (Remaing) {
-      console.log('oh waor', Remaing);
-      // setBanktype(Remaing);
-    }
-    else{
-      console.log("onscene")
-    }
-  };
+  const[FilteredItems,setFilteredItems]=useState([])
   const [Payeedata, setPayeedata] = useState([]);
   const [Isloading, setLoading] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  // const [Banktypes, setBanktype] = useState([]);
+  const[checkBank,setBank]=useState(null)
+  const [bank,ShowBanklist]=useState(false)
+  const[bankid,setBankid]=useState(null)
+  const [payeename,setPayeename]=useState(null)
+  const[bankname,setbankname]=useState(null);
+  const[account_number,setAccountNumber]=useState(null)
+
+
+
+  const FetchBankType = async () => {
+
+    const Remaing = await GetAllBanks(actionTypes.GetAllBanksAPI);
+    if (Remaing) {
+      setFilteredItems(Remaing)
+    } else {
+      console.log('onscene');
+    }
+  };
+  
 
   const FetchData = async () => {
-    console.log("FETCH data")
+    console.log('fetching payee data that is bieng added');
     setLoading(true);
     const data = await FectchApiPayee();
-    if (data) {
+    if (data!='Expired token') {
       setLoading(false);
-      console.log('jhgdjhsd', data);
       setPayeedata(data);
     } else {
+      setLoading(false)
       console.log('no data');
     }
   };
+
   const [showdata, setshowdata] = useState({
     payees_name: '',
     bank_name: '',
     account_number: '',
   });
+
   const dispatch = useDispatch();
 
   const SetChangedText = (name, value) => {
@@ -89,40 +107,55 @@ const Payee = ({
       [name]: value,
     });
   };
-
-  const UpdateApi = item => {
-    // SetBanktype(true)
-    console.log('item', item.id);
+ 
+  
+  
+  const SelectBank = item => {
+    setBankid(item.id)
+    setBank(item.bank_name);
+    ShowBanklist(!bank)
   };
+
+
+  const UpdateApi = async item => {
+    setLoading(true)
+    const Updatadata = await UpdatadataPayee(actionTypes.UpdateFecthApipayee+item.id,item,bankid)
+    if(Updatadata){     
+      setPayeename(Updatadata.payees_name) 
+      console.log("asdh",Updatadata.bank.bank_name)
+      setbankname(Updatadata.bank.bank_name) 
+      setAccountNumber(Updatadata.account_number)                              
+      setLoading(false)
+      setModalVisible(!modalVisible)
+    }
+    else{
+      setLoading(false)
+      alert(Updatadata)
+    }
+  };
+
 
   const handleInput = async () => {
     console.log('logout');
     dispatch(Logout());
   };
 
-  const ViewModalState = () => {
-    setModalVisible(!modalVisible);
-    
-  };
 
   const Payetab = item => {
     return Alert.alert(
       'Are your sure?',
       'Are you sure you want to remove this?',
       [
-        // The "Yes" button
         {
           text: 'Yes',
           onPress: async () => {
             console.log('itemid', item.id);
             const DelePayee = await DeletepayeeeApi(
-              actiontypes.Deletpayeeapi + item.id,
+              actionTypes.Deletpayeeapi + item.id,
             );
             FetchData();
           },
         },
-        // The "No" button
-        // Does nothing but dismiss the dialog when tapped
         {
           text: 'No',
         },
@@ -131,6 +164,7 @@ const Payee = ({
   };
 
   const EditPayee = item => {
+    console.log("item to edit",item)
     setshowdata(item);
     setModalVisible(!modalVisible);
   };
@@ -163,10 +197,10 @@ const Payee = ({
           <Text style={{textAlign: 'center'}}>Please Wait</Text>
         </View>
       ) : (
+        
         <View style={{flex: 1}}>
           {Payeedata.length > 0 ? (
             <FlatList
-              // style={{flex:2}}
               data={Payeedata}
               showsHorizontalScrollIndicator={false}
               keyExtractor={item => item.id}
@@ -189,7 +223,7 @@ const Payee = ({
                           fontWeight: 'bold',
                           paddingLeft: 10,
                         }}>
-                        {item.payees_name}
+                        {payeename==null?item.payees_name:payeename}
                       </Text>
                     </View>
                     <View style={{flexDirection: 'row'}}>
@@ -200,7 +234,7 @@ const Payee = ({
                           fontWeight: 'bold',
                           paddingLeft: 10,
                         }}>
-                        {item.payees_name}
+                        {bankname==null?item.bank?.bank_name:bankname}
                       </Text>
                     </View>
                     <View style={{flexDirection: 'row'}}>
@@ -211,7 +245,7 @@ const Payee = ({
                           fontWeight: 'bold',
                           paddingLeft: 10,
                         }}>
-                        {item.account_number}
+                        {account_number==null?item.account_number:account_number}
                       </Text>
                     </View>
                     <View
@@ -248,28 +282,25 @@ const Payee = ({
                             }
                           />
                           <Text style={styles.sameText}>Select Bank</Text>
-                <Pressable
-                  style={{
-                    borderColor: '#AAB8DB',
-                    borderWidth: 1,
-                    borderRadius: 10,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    paddingHorizontal: 10,
-                    paddingVertical: 15,
-                  }}
-                  onPress={ViewModalState}>
-                <Text style={{color: 'black', fontSize: 18}}>sdbf</Text>
-                <Feather name="chevron-down" color={'black'} size={20} />
-                </Pressable>
-                {/* {
-                  Banktypes?(
-                    <Banklist showdata={showdata} />
-                    
-                  ):(
-                    null
-                  )
-                } */}
+                          <Pressable
+                          style={{
+                            borderColor: '#AAB8DB',
+                            borderWidth: 1,
+                            borderRadius: 10,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            paddingHorizontal: 10,
+                            paddingVertical: 15,
+                          }}
+                          onPress={()=>ShowBanklist(!bank)}
+                          > 
+                          
+                         <Text style={{color:'black'}}>{checkBank==null?showdata.bank?.bank_name:checkBank}</Text>   
+                              
+                                               
+                          <Feather name="chevron-down" color={'black'} size={20} />
+                          {bank?<Banklist FilteredItems={FilteredItems}   SelectBank={SelectBank} />:null}
+                          </Pressable>
                           <Text style={styles.sameText}>
                             Enter Account Number
                           </Text>
@@ -285,7 +316,7 @@ const Payee = ({
                           />
                           <View style={GlobalStyles.SocialLogin}>
                             <TouchableOpacity
-                              onPress={() => UpdateApi(item)}
+                              onPress={() => UpdateApi(showdata)}
                               style={styles.Button}>
                               <Text
                                 style={{
@@ -333,7 +364,13 @@ const Payee = ({
   );
 };
 
-export default connect(null, {Logout,FectchApiPayee,DeletepayeeeApi,GetAllBanks})(Payee);
+export default connect(null, {
+  Logout,
+  FectchApiPayee,
+  DeletepayeeeApi,
+  GetAllBanks,
+  UpdatadataPayee
+})(Payee);
 
 const styles = StyleSheet.create({
   addView: {

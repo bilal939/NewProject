@@ -1,13 +1,13 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React, {useEffect} from 'react';
 import Homestack from './Homestack';
 import {connect} from 'react-redux';
 import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AuthReducer } from '../Screens/Actions/Reducer';
 import * as actionTypes from '../Screens/Actions/Actiontypes'
 import { NavigationContainer } from '@react-navigation/native';
 import Authstack from './Authstack';
+import { AuthReducer } from '../Screens/Actions/Reducer';
 const Index = ({AuthReducer}) => {
 
   let userToken='';
@@ -26,7 +26,7 @@ const Index = ({AuthReducer}) => {
         }
   
       } catch (e) {
-        console.log('error', e);
+        console.log('errorczxczxc', e);
       }
     };
     GetToken();
@@ -36,26 +36,24 @@ const Index = ({AuthReducer}) => {
   return (
       <NavigationContainer>
       {AuthReducer.isloggedin  ? (
-        <Homestack/> 
-
+       <Homestack/> 
+     
       )     
        :(
-        <Authstack/>        
-
+        <Authstack/>   
+       
        )
       }
       </NavigationContainer>
   );
 };
 
-const mapstatestoprops = state =>{
-  console.log(state)
-  return {
+const mapstatestoprops = state =>({
    AuthReducer:state
-  }
-}
+  
+})
 
-export default connect(mapstatestoprops,null)(Index);
+export default connect(mapstatestoprops)(Index);
 
 const styles = StyleSheet.create({
   container: {

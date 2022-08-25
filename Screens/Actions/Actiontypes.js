@@ -21,4 +21,4 @@ export const AddPayee = 'AddPayee'
 export const FetchPayeeApi = 'https://brytapps.codexnow.com/loginAndRegister/list/payees'
 export const FetchPayee='Fetchapi'
 export const Deletpayeeapi = 'https://brytapps.codexnow.com/loginAndRegister/get/payee/'
-export const UpdateFecthApi = 'https://brytapps.codexnow.com/loginAndRegister/list/payee/';
+export const UpdateFecthApipayee = 'https://brytapps.codexnow.com/loginAndRegister/get/payee/';

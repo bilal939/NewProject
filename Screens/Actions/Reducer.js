@@ -1,4 +1,4 @@
-import Payee from '../HomeScrens/Payee'
+
 import * as actionTypes from './Actiontypes'
 const initiallStates = {
     isLoading:'',
