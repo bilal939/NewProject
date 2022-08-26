@@ -8,7 +8,7 @@ import * as actionTypes from '../Screens/Actions/Actiontypes'
 import { NavigationContainer } from '@react-navigation/native';
 import Authstack from './Authstack';
 import { AuthReducer } from '../Screens/Actions/Reducer';
-const Index = ({AuthReducer}) => {
+const Index = ({AuthReducer,navigation}) => {
 
   let userToken='';
   const dispatch = useDispatch();
@@ -18,8 +18,10 @@ const Index = ({AuthReducer}) => {
       try {
         userToken = await AsyncStorage.getItem('token');
         console.log('user token', userToken);
-        if (userToken == null) {
+        if (userToken == null || userToken == 'Expired Token') {
+          navigation.navigate('Login')
           dispatch({type:actionTypes.islogout})
+
         } else {
           console.log("token milgya")
           dispatch({type:actionTypes.Login})

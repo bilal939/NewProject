@@ -1,29 +1,36 @@
-import {StyleSheet, Text, View, Image,FlatList} from 'react-native';
-import {Pressable, Modal,TextInput} from 'react-native';
+import {StyleSheet, Text, View, Image, FlatList} from 'react-native';
+import {Pressable, Modal, TextInput} from 'react-native';
 import React from 'react';
-import Entypo from 'react-native-vector-icons/Entypo'
-import { useState } from 'react';
-import { useEffect } from 'react';
-const Banklist = ({FilteredItems,SelectBank}) => {
-  
-  
+import Entypo from 'react-native-vector-icons/Entypo';
+import {useState, useEffect} from 'react';
+const Banklist = ({FilteredItems, SelectBank}) => {
   const [modalVisible, setModalVisible] = useState(true);
-  // useEffect(() => {
-  //   if (Modelitems) {
-  //     setFilteredItems([...Modelitems]);
-  //   }
-  // }, [Modelitems]);
+  const [NewFilterItems, setNewFilterItems] = useState([]);
 
-  const[Search,setSearchValue]=useState('')
+  useEffect(() => {
+    if (FilteredItems) {
+      setNewFilterItems([...FilteredItems]);
+    }
+  }, [FilteredItems]);
 
-  // useEffect(()=>{
-  //   setdata();
-  // })
-  // const setdata = () => {
-  //   setdatabank(FilteredItems)
-  // }
+  const [Search, setSearchValue] = useState('');
+  const Searchtext = val => {
+    if (val) {
+      const newData = FilteredItems.filter(item => {
+        const itemData = item.bank_name
+          ? item.bank_name.toUpperCase()
+          : ''.toUpperCase();
+        const textData = val.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setNewFilterItems(newData);
+      setSearchValue(val);
+    } else {
+      setNewFilterItems(FilteredItems);
+      setSearchValue(val);
+    }
+  };
 
-  
   return (
     <>
       <Modal animationType="slide" transparent={true} visible={modalVisible}>
@@ -67,7 +74,7 @@ const Banklist = ({FilteredItems,SelectBank}) => {
           {FilteredItems.length > 0 ? (
             <View style={{padding: 10}}>
               <FlatList
-                data={FilteredItems}
+                data={NewFilterItems}
                 style={{height: 580}}
                 showsHorizontalScrollIndicator={true}
                 renderItem={({item}) => (
@@ -116,27 +123,27 @@ const Banklist = ({FilteredItems,SelectBank}) => {
 export default Banklist;
 
 const styles = StyleSheet.create({
-    modalView: {
-        margin: 20,
-        backgroundColor: 'white',
-        borderRadius: 10,
-        padding: 10,
-        shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        flex: 0 / 7,
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-      },
-      Searchtext: {
-        padding: 5,
-        width: '88%',
-        backgroundColor: 'grey',
-        borderColor: 'black',
-        borderWidth: 1,
-        borderRadius: 5,
-      },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    flex: 0 / 7,
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  Searchtext: {
+    padding: 5,
+    width: '88%',
+    backgroundColor: 'grey',
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 5,
+  },
 });
