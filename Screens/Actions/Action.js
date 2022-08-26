@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ReactReduxContext } from 'react-redux';
 import * as actionTypes from './Actiontypes';
 
 
@@ -206,6 +205,9 @@ export const GetAllBanks = (item) => async dispatch => {
 
 
 
+
+
+///Crud Payeee Operation///
 
 export const AddpayeeData = (item) => async dispatch => {
   try {

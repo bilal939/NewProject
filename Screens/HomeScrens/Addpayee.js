@@ -5,12 +5,8 @@ import {
   Dimensions,
   ActivityIndicator,
   TextInput,
-  Modal,
   TouchableOpacity,
   Pressable,
-  FlatList,
-  Image,
-  Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState, useEffect} from 'react';
@@ -22,8 +18,6 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {connect} from 'react-redux';
 import {GetAllPayeeType, GetAllBanks, AddpayeeData} from '../Actions/Action';
 import * as actionTypes from '../Actions/Actiontypes';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Payee from './Payee';
 import Banklist from './Banklist';
 
 const Addpayee = ({
@@ -33,6 +27,7 @@ const Addpayee = ({
   navigate,
   AddpayeeData,
 }) => {
+
   const [Isloading, Set_Loading] = useState(true);
   const [items, setItems] = useState([]);
   const [open, setOpen] = useState(false);
@@ -47,12 +42,11 @@ const Addpayee = ({
   const [AccountNumber, setAccountNumber] = useState('');
   const [checkutility, setcheckutility] = useState('');
   const [Bank, setBank] = useState('Select Bank');
-  const [modalVisible, setModalVisible] = useState(false);
   const [FilteredItems, setFilteredItems] = useState([]);
   const [Bankid, setBankid] = useState('');
   const [Tyepid, setTypeid] = useState('');
   const [Utility, setUtility] = useState('');
-
+  const [showModal, setShowModal] = useState(false);
   let userfield = '';
 
   useEffect(() => {
@@ -91,7 +85,7 @@ const Addpayee = ({
     setAccountNumber('');
   };
 
-  const [showModal, setShowModal] = useState(false);
+  
 
   const Typedata = async item => {
     if (item == 2) {

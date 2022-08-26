@@ -14,6 +14,8 @@ const Banklist = ({FilteredItems, SelectBank}) => {
   }, [FilteredItems]);
 
   const [Search, setSearchValue] = useState('');
+
+  
   const Searchtext = val => {
     if (val) {
       const newData = FilteredItems.filter(item => {
