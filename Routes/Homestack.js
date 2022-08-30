@@ -1,19 +1,21 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Payee from '../Screens/HomeScrens/Payee';
 import Addpayee from '../Screens/HomeScrens/Addpayee';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-const Stack = createNativeStackNavigator();
+const HomeStack = createNativeStackNavigator();
 
-const Homestack = () => {
+const Home = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName='Payee'>
-      <Stack.Screen name="Payee" component={Payee} />
-      <Stack.Screen name="AddPayee" component={Addpayee} />
-    </Stack.Navigator>
+    <HomeStack.Navigator screenOptions={{headerShown:false}}>
+      <HomeStack.Screen name='Payee' component={Payee} />
+      <HomeStack.Screen name='Addpayee' component={Addpayee}/>
+    </HomeStack.Navigator>
   );
 };
 
-export default Homestack;
+export default Home;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+
+});

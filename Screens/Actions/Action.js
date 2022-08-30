@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GetToken } from '../../Asynchronous Storage/AsynchronousStorage';
 import * as actionTypes from './Actiontypes';
 
 
@@ -139,8 +140,9 @@ export const Logout = () => async dispatch => {
 };
 
 
-export const GetAllPayeeType = (token) => async (dispatch) =>{
+export const GetAllPayeeType = () => async (dispatch) =>{
   try {
+    const token = await GetToken();
     var config = {
       method:'GET',
       headers:{
@@ -175,7 +177,7 @@ export const GetAllBanks = (item) => async dispatch => {
   try {
     dispatch({type: actionTypes.SET_LOADING});
     console.log('Banks mien aya');
-    const token = await AsyncStorage.getItem('token');
+    const token = await GetToken();
     return await fetch(item
     , {
       method: 'GET',
@@ -193,8 +195,9 @@ export const GetAllBanks = (item) => async dispatch => {
         console.log('getting all the Banks');
         return Response.data
       } else {
-        console.log(Response.messages.message);
-        return Response.messages.message;
+        if(Response.description === 'Expired Token'){
+          dispatch({type:actionTypes.islogout})
+        }
       }
     });
   } catch (error) {
@@ -213,7 +216,7 @@ export const AddpayeeData = (item) => async dispatch => {
   try {
     dispatch({type: actionTypes.SET_LOADING});
     console.log('Add Karaha hun');
-    const token = await AsyncStorage.getItem('token');
+    const token = await GetToken();
     return await fetch(actionTypes.AddPayeeApi
     , {
       method: 'POST',
@@ -233,15 +236,16 @@ export const AddpayeeData = (item) => async dispatch => {
     ).then(async res => {
       const Response = await res.json();
       const status = res.status;
+      console.log("respose",Response)
       console.log('Status of payee is', Response);
       if (status == 200) {
-        console.log('getting all the Banks');
+        console.log("data tjat is bieg added",Response.data)
         return Response.description;
       } else {
         console.log(Response.description);
         return Response.description;
       }
-    });
+    }); 
   } catch (error) {
     return error;
   }
@@ -250,7 +254,7 @@ export const AddpayeeData = (item) => async dispatch => {
 
 export const FectchApiPayee = () => async dispatch => {
   try {
-    const token = await AsyncStorage.getItem('token');
+    const token = await GetToken();
     return await fetch(actionTypes.FetchPayeeApi
     , {
       method: 'GET',
@@ -266,8 +270,9 @@ export const FectchApiPayee = () => async dispatch => {
       if (status == 200) {
         return Response.data;
       } else {
-        console.log("gdvghas",Response.description);
-        return Response.description;
+        if(Response.description === 'Expired Token'){
+          dispatch({type:actionTypes.islogout})
+        }
       }
     });
   } catch (error) {
@@ -278,7 +283,7 @@ export const FectchApiPayee = () => async dispatch => {
 
 export const DeletepayeeeApi = (item) => async dispatch => {
   try {
-    const token = await AsyncStorage.getItem('token');
+    const token = await GetToken();
     return await fetch(item
     , {
       method: 'DELETE',
@@ -310,7 +315,7 @@ export const UpdatadataPayee = (item,itemdata,bankid) => async dispatch => {
 
 
   try {
-    const token = await AsyncStorage.getItem('token');
+    const token = await GetToken();
     return await fetch(item
     , {
       method: 'PUT',

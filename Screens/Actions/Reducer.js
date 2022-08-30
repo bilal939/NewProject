@@ -42,6 +42,12 @@ export const AuthReducer = (state=initiallStates,action)=>{
             isLoading:false,
             isloggedin:false,
         }
+        case(actionTypes.AddPayee):
+        return{
+            ...state,
+            payedata:action.payload
+
+        }
         default:
             return state;
     }

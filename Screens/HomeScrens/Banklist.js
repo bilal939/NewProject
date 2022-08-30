@@ -3,7 +3,8 @@ import {Pressable, Modal, TextInput} from 'react-native';
 import React from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {useState, useEffect} from 'react';
-const Banklist = ({FilteredItems, SelectBank}) => {
+const Banklist = ({FilteredItems, SetBankDetails,setShowModal}) => {
+   
   const [modalVisible, setModalVisible] = useState(true);
   const [NewFilterItems, setNewFilterItems] = useState([]);
 
@@ -14,6 +15,18 @@ const Banklist = ({FilteredItems, SelectBank}) => {
   }, [FilteredItems]);
 
   const [Search, setSearchValue] = useState('');
+
+   const SelectBank = item => {
+    console.log("item",item)
+    SetBankDetails(item);
+    setModalVisible(false)
+    setShowModal(false)
+  };
+
+  const CloseModal  = () => {
+    setModalVisible(false)
+    setShowModal(false)
+  }
 
   
   const Searchtext = val => {
@@ -56,7 +69,7 @@ const Banklist = ({FilteredItems, SelectBank}) => {
               name="cross"
               size={20}
               color={'white'}
-              onPress={() => setModalVisible(!modalVisible)}
+              onPress={() => CloseModal(false)}
             />
           </View>
           <View

@@ -8,6 +8,7 @@ import * as actionTypes from '../Screens/Actions/Actiontypes'
 import { NavigationContainer } from '@react-navigation/native';
 import Authstack from './Authstack';
 import { AuthReducer } from '../Screens/Actions/Reducer';
+import BottomTab from './BottomTab';
 const Index = ({AuthReducer,navigation}) => {
 
   let userToken='';
@@ -19,9 +20,7 @@ const Index = ({AuthReducer,navigation}) => {
         userToken = await AsyncStorage.getItem('token');
         console.log('user token', userToken);
         if (userToken == null || userToken == 'Expired Token') {
-          navigation.navigate('Login')
           dispatch({type:actionTypes.islogout})
-
         } else {
           console.log("token milgya")
           dispatch({type:actionTypes.Login})
@@ -38,12 +37,10 @@ const Index = ({AuthReducer,navigation}) => {
   return (
       <NavigationContainer>
       {AuthReducer.isloggedin  ? (
-       <Homestack/> 
-     
+       <BottomTab/> 
       )     
        :(
         <Authstack/>   
-       
        )
       }
       </NavigationContainer>
@@ -51,6 +48,7 @@ const Index = ({AuthReducer,navigation}) => {
 };
 
 const mapstatestoprops = state =>({
+
    AuthReducer:state
   
 })

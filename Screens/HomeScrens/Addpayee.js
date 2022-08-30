@@ -24,7 +24,6 @@ const Addpayee = ({
   navigation,
   GetAllPayeeType,
   GetAllBanks,
-  navigate,
   AddpayeeData,
 }) => {
 
@@ -41,12 +40,12 @@ const Addpayee = ({
   const [Payeename, setPayeename] = useState('');
   const [AccountNumber, setAccountNumber] = useState('');
   const [checkutility, setcheckutility] = useState('');
-  const [Bank, setBank] = useState('Select Bank');
   const [FilteredItems, setFilteredItems] = useState([]);
-  const [Bankid, setBankid] = useState('');
+  const[BankDetails,SetBankDetails]=useState([]);
   const [Tyepid, setTypeid] = useState('');
   const [Utility, setUtility] = useState('');
   const [showModal, setShowModal] = useState(false);
+
   let userfield = '';
 
   useEffect(() => {
@@ -71,7 +70,7 @@ const Addpayee = ({
       Set_Loading(false);
       setItems(Payedata);
     } else {
-      Set_Loading(false);
+      Set_Loading(falsse);
       alert(Payedata);
     }
   };
@@ -103,28 +102,23 @@ const Addpayee = ({
       Set_Loading(true);
       const Remaing = await GetAllBanks(actionTypes.GetAllBanksAPI);
       if (Remaing) {
-        Set_Loading(false);
+        setNewFiled('Select Bank');
         Set_Loading(false);
         settext('');
-        setNewFiled('Select Bank');
         setModelItems(Remaing);
       }
     }
   };
 
-  const SelectBank = item => {
-    console.log("item",item)
-    setBank(item.bank_name);
-    setBankid(item.id);
-    setShowModal(false)
-  };
+
 
  
   const checkvalidate = async () => {
     if (Tyepid != '') {
-      if (Bankid != '' || Utility != '') {
+      if (BankDetails != '' || Utility != '') {
         if (Payeename != '') {
           if (AccountNumber != '') {
+            let Bankid = BankDetails.id;
             userfield = {Payeename, AccountNumber, Tyepid, Bankid};
             const data = await AddpayeeData(userfield);
             if (data === 'Payee Created') {
@@ -239,7 +233,7 @@ const Addpayee = ({
                       setUtility(item.id);
                       setModalValue(item.bank_name);
                     }}
-                    placeholder={UtilityText ? UtilityText : 'Select Bank'}
+                    placeholder={UtilityText!=null?UtilityText:'Select Bank'}
                     zIndex={2000}
                     zIndexInverse={2000}
                     maxHeight={100}
@@ -260,13 +254,13 @@ const Addpayee = ({
                     paddingHorizontal: 10,
                     paddingVertical: 15,
                   }}
-                onPress={()=>setShowModal(!showModal)}
+                onPress={()=>setShowModal(true)}
                 >
-                  <Text style={{color: 'black', fontSize: 18}}>{Bank}</Text>
+                  <Text style={{color: 'black', fontSize: 18}}>{BankDetails.bank_name!=null?BankDetails.bank_name:'Select Bank'}</Text>
                   <Feather name="chevron-down" color={'black'} size={20} />
                 </Pressable>
               )}
-              {showModal ? <Banklist FilteredItems={FilteredItems} SelectBank={SelectBank}  /> : null}
+              {showModal ? <Banklist FilteredItems={FilteredItems} SetBankDetails={SetBankDetails} setShowModal={setShowModal} /> : null}
              
 
               <Text style={styles.sameText}>Enter Payee Name</Text>
