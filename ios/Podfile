@@ -27,6 +27,15 @@ target 'NewProject' do
 
   pod 'RNCPicker', :path => '../node_modules/@react-native-picker/picker'
 
+
+  pod 'react-native-contacts', :path => '../node_modules/react-native-contacts'
+
+  pod 'appcenter-core', :path => '../node_modules/appcenter'
+
+  pod 'appcenter-analytics', :path => '../node_modules/appcenter-analytics'
+
+  pod 'appcenter-crashes', :path => '../node_modules/appcenter-crashes'
+
   target 'NewProjectTests' do
     inherit! :complete
     # Pods for testing

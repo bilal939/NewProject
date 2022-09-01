@@ -213,6 +213,7 @@ export const GetAllBanks = (item) => async dispatch => {
 ///Crud Payeee Operation///
 
 export const AddpayeeData = (item) => async dispatch => {
+  console.log("item id",item.Bankid)
   try {
     dispatch({type: actionTypes.SET_LOADING});
     console.log('Add Karaha hun');
@@ -228,8 +229,7 @@ export const AddpayeeData = (item) => async dispatch => {
       body: JSON.stringify({
         payees_name: item.Payeename,
         account_number: item.AccountNumber,
-        pay_type: item.Typeid,
-        bank:item.Bankid
+        bank:item.Typeid
       }),
       
     }

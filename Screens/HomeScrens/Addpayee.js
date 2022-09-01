@@ -19,33 +19,25 @@ import {connect} from 'react-redux';
 import {GetAllPayeeType, GetAllBanks, AddpayeeData} from '../Actions/Action';
 import * as actionTypes from '../Actions/Actiontypes';
 import Banklist from './Banklist';
+import UtilityDropDown from './UtilityDropDown';
 
-const Addpayee = ({
-  navigation,
-  GetAllPayeeType,
-  GetAllBanks,
-  AddpayeeData,
-}) => {
+const Addpayee = ({navigation, GetAllPayeeType, GetAllBanks, AddpayeeData}) => {
+
+
 
   const [Isloading, Set_Loading] = useState(true);
   const [items, setItems] = useState([]);
   const [open, setOpen] = useState(false);
   const [typevalue, setTypeValue] = useState('');
   const [Modelitems, setModelItems] = useState([]);
-  const [Modelopen, setModalOpen] = useState(false);
-  const [Modelvalue, setModalValue] = useState('');
-  const [UtilityText, settext] = useState('');
-  const [placeholderColor, setPlaceHolderColor] = useState('black');
   const [NewField, setNewFiled] = useState('Select Bank');
   const [Payeename, setPayeename] = useState('');
   const [AccountNumber, setAccountNumber] = useState('');
   const [checkutility, setcheckutility] = useState('');
   const [FilteredItems, setFilteredItems] = useState([]);
-  const[BankDetails,SetBankDetails]=useState([]);
-  const [Tyepid, setTypeid] = useState('');
-  const [Utility, setUtility] = useState('');
+  const [Type, settype] = useState('');
   const [showModal, setShowModal] = useState(false);
-
+  const[Typeinfo,setTypeInfo]=useState([])
   let userfield = '';
 
   useEffect(() => {
@@ -75,16 +67,11 @@ const Addpayee = ({
     }
   };
 
-  
-
   const ResetField = () => {
-    setBank('');
     setTypeValue('');
     setPayeename('');
     setAccountNumber('');
   };
-
-  
 
   const Typedata = async item => {
     if (item == 2) {
@@ -93,8 +80,6 @@ const Addpayee = ({
       const type2 = await GetAllBanks(actionTypes.GetAllBanksAPI + utility);
       if (type2) {
         Set_Loading(false);
-        settext('Gas, Electric, Phone....');
-        setPlaceHolderColor('#AAB8DB');
         setNewFiled('Select Utility');
         setModelItems(type2);
       }
@@ -104,22 +89,19 @@ const Addpayee = ({
       if (Remaing) {
         setNewFiled('Select Bank');
         Set_Loading(false);
-        settext('');
         setModelItems(Remaing);
       }
     }
   };
 
 
-
- 
   const checkvalidate = async () => {
-    if (Tyepid != '') {
-      if (BankDetails != '' || Utility != '') {
+    if (Type != '') {
+      if (Typeinfo.id != '') {
         if (Payeename != '') {
           if (AccountNumber != '') {
-            let Bankid = BankDetails.id;
-            userfield = {Payeename, AccountNumber, Tyepid, Bankid};
+            let Typeid = Typeinfo.id
+            userfield = {Payeename, AccountNumber, Type, Typeid};
             const data = await AddpayeeData(userfield);
             if (data === 'Payee Created') {
               ResetField();
@@ -182,9 +164,10 @@ const Addpayee = ({
                 onSelectItem={item => {
                   console.log('itemis', item.type);
                   setTypeValue(item.type);
-                  setTypeid(item.id);
+                  settype(item.id);
                   setcheckutility(item.type);
                   Typedata(item.id);
+                  setTypeInfo('')
                 }}
                 listMode="SCROLLVIEW"
                 scrollViewProps={{
@@ -216,31 +199,11 @@ const Addpayee = ({
               </Text>
               {checkutility == 'Utility' ? (
                 <>
-                  <DropDownPicker
-                    open={Modelopen}
-                    value={Modelvalue}
-                    items={Modelitems}
-                    setOpen={setModalOpen}
-                    setItems={setModelItems}
-                    setValue={setModalValue}
-                    dropDownContainerStyle={{borderColor: '#AAB8DB'}}
-                    style={{borderColor: '#AAB8DB'}}
-                    placeholderStyle={{
-                      color: placeholderColor,
-                      fontSize: 16,
-                    }}
-                    onSelectItem={item => {
-                      setUtility(item.id);
-                      setModalValue(item.bank_name);
-                    }}
-                    placeholder={UtilityText!=null?UtilityText:'Select Bank'}
-                    zIndex={2000}
-                    zIndexInverse={2000}
-                    maxHeight={100}
-                    schema={{
-                      label: 'bank_name',
-                      value: 'id',
-                    }}
+                  <UtilityDropDown
+                    setModelItems={setModelItems}
+                    Modelitems={Modelitems}
+                    setTypeInfo={setTypeInfo}
+                    Typeinfo={Typeinfo}
                   />
                 </>
               ) : (
@@ -254,14 +217,22 @@ const Addpayee = ({
                     paddingHorizontal: 10,
                     paddingVertical: 15,
                   }}
-                onPress={()=>setShowModal(true)}
-                >
-                  <Text style={{color: 'black', fontSize: 18}}>{BankDetails.bank_name!=null?BankDetails.bank_name:'Select Bank'}</Text>
+                  onPress={() => setShowModal(true)}>
+                  <Text style={{color: 'black', fontSize: 18}}>
+                    {Typeinfo.bank_name != null
+                      ? Typeinfo.bank_name
+                      : 'Select Bank'}
+                  </Text>
                   <Feather name="chevron-down" color={'black'} size={20} />
                 </Pressable>
               )}
-              {showModal ? <Banklist FilteredItems={FilteredItems} SetBankDetails={SetBankDetails} setShowModal={setShowModal} /> : null}
-             
+              {showModal ? (
+                <Banklist
+                  FilteredItems={FilteredItems}
+                  setTypeInfo={setTypeInfo}
+                  setShowModal={setShowModal}
+                />
+              ) : null}
 
               <Text style={styles.sameText}>Enter Payee Name</Text>
               <TextInput

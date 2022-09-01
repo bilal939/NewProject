@@ -26,6 +26,7 @@ import * as actionTypes from '../Actions/Actiontypes';
 import {useFocusEffect} from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Feather';
 import Banklist from './Banklist';
+import UtilityDropDown from './UtilityDropDown';
 
 const Height = Dimensions.get('screen').height;
 const Payee = ({
@@ -35,14 +36,13 @@ const Payee = ({
   GetAllBanks,
   UpdatadataPayee,
 }) => {
-
-  const[FilteredItems,setFilteredItems]=useState([])
+  const [FilteredItems, setFilteredItems] = useState([]);
   const [Payeedata, setPayeedata] = useState([]);
   const [Isloading, setLoading] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const[Bankdetails,SetBankDetails]=useState([])
-
+  const[Typeinfo,setTypeInfo]=useState([])
+ 
   useFocusEffect(
     React.useCallback(() => {
       FetchData();
@@ -52,29 +52,44 @@ const Payee = ({
   useEffect(() => {
     FetchBankType();
   }, []);
-  
+
+  useEffect(() => {
+    Typedata();
+  }, []);
+
+  const [Modelitems, setModelItems] = useState([]);
+
+  const Typedata = async () => {
+    const utility = '?type=utility';
+    const type2 = await GetAllBanks(actionTypes.GetAllBanksAPI + utility);
+    if (type2) {
+      console.log('Type 2', type2);
+      setModelItems(type2);
+    }
+  };
 
   const FetchBankType = async () => {
-
     const Remaing = await GetAllBanks(actionTypes.GetAllBanksAPI);
+    console.log('Al the banks', Remaing);
     if (Remaing) {
-      setFilteredItems(Remaing)
+      setFilteredItems(Remaing);
     } else {
       console.log('onscene');
     }
   };
-  
+
+  const [ShowUtitlity, SetShowUtility] = useState(false);
 
   const FetchData = async () => {
     setLoading(true);
     const data = await FectchApiPayee();
     if (data) {
-      console.log("data that is bien added",data)
+      console.log('data that is bien added', data);
       setLoading(false);
       setPayeedata(data);
     } else {
-      setLoading(false)
-      alert("Token Expired")
+      setLoading(false);
+      alert('Token Expired');
     }
   };
 
@@ -83,36 +98,33 @@ const Payee = ({
     account_number: '',
   });
 
-
   const SetChangedText = (name, value) => {
     setshowdata({
       ...showdata,
       [name]: value,
     });
   };
- 
   
-  
- 
-
-
   const UpdateApi = async item => {
-    setLoading(true)
-    const Updatadata = await UpdatadataPayee(actionTypes.UpdateFecthApipayee+item.id,item,Bankdetails.id)
-    if(Updatadata){   
-      setLoading(false)  
-      console.log("update data",Updatadata)  
-      FetchData()
-      setModalVisible(!modalVisible)
-    }
-    else{
-      setLoading(false)
-      alert(Updatadata)
+    setLoading(true);
+    console.log("item",item)
+    const Updatadata = await UpdatadataPayee(
+      actionTypes.UpdateFecthApipayee + item.id,
+      item,
+      Typeinfo.id,
+    );
+    setTypeInfo(Updatadata.bank?.bank_name)
+    if (Updatadata) {
+      setLoading(false);
+      console.log('update data', Updatadata);
+      FetchData();
+      setModalVisible(!modalVisible);
+    } else {
+    
+      setLoading(false);
+      alert(Updatadata);
     }
   };
-
-
- 
 
   const Payetab = item => {
     return Alert.alert(
@@ -126,7 +138,7 @@ const Payee = ({
             const DelePayee = await DeletepayeeeApi(
               actionTypes.Deletpayeeapi + item.id,
             );
-            FetchData()
+            FetchData();
           },
         },
         {
@@ -137,11 +149,24 @@ const Payee = ({
   };
 
   const EditPayee = item => {
-    console.log("item to edit",item)
-    SetBankDetails(item.bank?.bank_name)
+    console.log('item to edit', item);
+    if (item.bank?.type === 'utility') {
+    console.log("type utility",item.bank?.bank_name)
+    SetShowUtility(true);
+    setTypeInfo(item.bank?.bank_name);  
     setModalVisible(true);
     setshowdata(item);
+    }
+    else if(item.bank?.type === 'bank'){
+    SetShowUtility(false);
+    console.log("Bank",item.bank?.type)
+    setTypeInfo(item.bank?.bank_name);
+    setModalVisible(true);
+    setshowdata(item);
+    }
   };
+
+  
 
   return (
     <View style={[GlobalStyles.Container, {backgroundColor: '#E3E5E8'}]}>
@@ -166,14 +191,13 @@ const Payee = ({
       <Text style={{color: 'black', fontSize: 20, paddingLeft: 20}}>
         My payees
       </Text>
-      
+
       {Isloading ? (
         <View style={GlobalStyles.ActivityIndicator}>
           <ActivityIndicator size={20} color={'black'} />
           <Text style={{textAlign: 'center'}}>Please Wait</Text>
         </View>
       ) : (
-        
         <View style={{flex: 1}}>
           {Payeedata.length > 0 ? (
             <FlatList
@@ -187,7 +211,7 @@ const Payee = ({
                     style={{
                       marginBottom: 20,
                       padding: 10,
-                      margin: 20, 
+                      margin: 20,
                       backgroundColor: 'white',
                       borderRadius: 10,
                       position: 'relative',
@@ -243,97 +267,110 @@ const Payee = ({
                       <Pressable onPress={() => EditPayee(item)}>
                         <Entypo name="edit" color={'black'} size={20} />
                       </Pressable>
-                   
                     </View>
-                    
                   </View>
                 </>
               )}
             />
           ) : null}
-           <Modal
-           animationType="slide"
-           transparent={true}
-           
-           visible={modalVisible}>
-           <View style={styles.modalView}>
-             <Text style={styles.sameText}>payees_name</Text>
-             <TextInput
-               placeholder="Payee Name"
-               placeholderTextColor={'grey'}
-               value={showdata.payees_name}
-               style={styles.TextInput}
-               onChangeText={value =>
-                 SetChangedText('payees_name', value)
-               }
-             />
-             <Text style={styles.sameText}>Select Bank</Text>
-             <Pressable
-             style={{
-               borderColor: '#AAB8DB',
-               borderWidth: 1,
-               borderRadius: 10,
-               flexDirection: 'row',
-               justifyContent: 'space-between',
-               paddingHorizontal: 10,
-               paddingVertical: 15,
-             }}
-             onPress={()=>setShowModal(!showModal)}
-             > 
-            <Text style={{color:'black'}}>{Bankdetails.bank_name==null?Bankdetails:Bankdetails.bank_name}</Text>                    
-             <Feather name="chevron-down" color={'black'} size={20} />
-             {showModal?<Banklist FilteredItems={FilteredItems} SetBankDetails={SetBankDetails} setShowModal={setShowModal}   />:null}
-             </Pressable>
-             <Text style={styles.sameText}>
-               Enter Account Number
-             </Text>
-             <TextInput
-               placeholder="Account Number"
-               placeholderTextColor={'grey'}
-               value={showdata.account_number}
-               keyboardType={'numeric'}
-               style={styles.TextInput} 
-               onChangeText={value =>
-                 SetChangedText('account_number', value)
-               }
-             />
-             <View style={GlobalStyles.SocialLogin}>
-               <TouchableOpacity
-                 onPress={() => UpdateApi(showdata)}
-                 style={styles.Button}>
-                 <Text
-                   style={{
-                     color: 'white',
-                     fontSize: 20,
-                     fontWeight: 'bold',
-                   }}>
-                   Update
-                 </Text>
-               </TouchableOpacity>
-               <TouchableOpacity
-                 onPress={() => setModalVisible(!modalVisible)}
-                 style={{
-                   ...styles.Button,
-                   backgroundColor: 'red',
-                 }}>
-                 <Text
-                   style={{
-                     color: 'white',
-                     fontSize: 20,
-                     fontWeight: 'bold',
-                   }}>
-                   Cancel
-                 </Text>
-               </TouchableOpacity>
-             </View>
-           </View>
-         </Modal>
-        </View>
-        
-      )}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}>
+            <View style={styles.modalView}>
+              <Text style={styles.sameText}>payees_name</Text>
+              <TextInput
+                placeholder="Payee Name"
+                placeholderTextColor={'grey'}
+                value={showdata.payees_name}
+                style={styles.TextInput}
+                onChangeText={value => SetChangedText('payees_name', value)}
+              />
 
-          
-      
+              {ShowUtitlity ? (
+                <>
+                  <Text style={styles.sameText}>Select Utility</Text>
+                  <UtilityDropDown
+                    setModelItems={setModelItems}
+                    Modelitems={Modelitems}
+                    setTypeInfo={setTypeInfo}
+                    Typeinfo={Typeinfo}
+                  />
+                  
+                </>
+              ) : (
+                <>
+                  <Text style={styles.sameText}>Select Bank</Text>
+                  <Pressable
+                    style={{
+                      borderColor: '#AAB8DB',
+                      borderWidth: 1,
+                      borderRadius: 10,
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      paddingHorizontal: 10,
+                      paddingVertical: 15,
+                    }}
+                    onPress={() => setShowModal(!showModal)}>
+                    <Text style={{color: 'black'}}>
+                      {Typeinfo.bank_name == null
+                        ? Typeinfo
+                        : Typeinfo.bank_name}
+                    </Text>
+                    <Feather name="chevron-down" color={'black'} size={20} />
+                    {showModal ? (
+                      <Banklist
+                        FilteredItems={FilteredItems}
+                        setShowModal={setShowModal}
+                        setTypeInfo={setTypeInfo}
+                      />
+                    ) : null}
+                  </Pressable>
+                </>
+              )}
+
+              <Text style={styles.sameText}>Enter Account Number</Text>
+              <TextInput
+                placeholder="Account Number"
+                placeholderTextColor={'grey'}
+                value={showdata.account_number}
+                keyboardType={'numeric'}
+                style={styles.TextInput}
+                onChangeText={value => SetChangedText('account_number', value)}
+              />
+              <View style={GlobalStyles.SocialLogin}>
+                <TouchableOpacity
+                  onPress={() => UpdateApi(showdata)}
+                  style={styles.Button}>
+                  <Text
+                    style={{
+                      color: 'white',
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                    }}>
+                    Update
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setModalVisible(!modalVisible)}
+                  style={{
+                    ...styles.Button,
+                    backgroundColor: 'red',
+                  }}>
+                  <Text
+                    style={{
+                      color: 'white',
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                    }}>
+                    Cancel
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        </View>
+      )}
     </View>
   );
 };
@@ -342,7 +379,7 @@ export default connect(null, {
   FectchApiPayee,
   DeletepayeeeApi,
   GetAllBanks,
-  UpdatadataPayee
+  UpdatadataPayee,
 })(Payee);
 
 const styles = StyleSheet.create({
