@@ -7,7 +7,7 @@ const HomeStack = createNativeStackNavigator();
 
 const Home = () => {
   return (
-    <HomeStack.Navigator screenOptions={{headerShown:false}}>
+    <HomeStack.Navigator screenOptions={{ headerShown:false,}} >
       <HomeStack.Screen name='Payee' component={Payee} />
       <HomeStack.Screen name='Addpayee' component={Addpayee}/>
     </HomeStack.Navigator>
@@ -15,7 +15,3 @@ const Home = () => {
 };
 
 export default Home;
-
-const styles = StyleSheet.create({
-
-});

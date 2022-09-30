@@ -3,13 +3,17 @@ import {Pressable, Modal, TextInput} from 'react-native';
 import React from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {useState, useEffect} from 'react';
+import Feather from 'react-native-vector-icons/Feather'
 
-const Banklist = ({FilteredItems, setShowModal,setTypeInfo}) => {
+const Banklist = ({FilteredItems, setShowModal, setTypeInfo, Title}) => {
+
+  
   const [modalVisible, setModalVisible] = useState(true);
   const [NewFilterItems, setNewFilterItems] = useState([]);
-
+  
   useEffect(() => {
     if (FilteredItems) {
+      console.log('flitered', FilteredItems);
       setNewFilterItems([...FilteredItems]);
     }
   }, [FilteredItems]);
@@ -18,9 +22,9 @@ const Banklist = ({FilteredItems, setShowModal,setTypeInfo}) => {
 
   const SelectBank = item => {
     console.log('item', item);
-    setTypeInfo(item)
+    setTypeInfo(item);
     setModalVisible(false);
-    setShowModal(false);
+    setShowModal(false)
   };
 
   const CloseModal = () => {
@@ -31,9 +35,15 @@ const Banklist = ({FilteredItems, setShowModal,setTypeInfo}) => {
   const Searchtext = val => {
     if (val) {
       const newData = FilteredItems.filter(item => {
-        const itemData = item.bank_name
-          ? item.bank_name.toUpperCase()
-          : ''.toUpperCase();
+        const itemData =
+          Title === 'Contact'
+            ? item.country
+              ? item.country.toUpperCase()
+              : ''.toUpperCase()
+            : item.bank_name
+            ? item.bank_name.toUpperCase()
+            : ''.toUpperCase();
+
         const textData = val.toUpperCase();
         return itemData.indexOf(textData) > -1;
       });
@@ -57,7 +67,7 @@ const Banklist = ({FilteredItems, setShowModal,setTypeInfo}) => {
             }}>
             <View></View>
             <Text style={{color: 'grey', fontSize: 20, fontWeight: 'bold'}}>
-              Select Bank
+              {Title != 'Contact' ? 'Select Bank' : 'Select Country Code'}
             </Text>
             <Entypo
               style={{
@@ -88,6 +98,7 @@ const Banklist = ({FilteredItems, setShowModal,setTypeInfo}) => {
           {FilteredItems.length > 0 ? (
             <View style={{padding: 10}}>
               <FlatList
+                keyboardShouldPersistTaps='handled'
                 data={NewFilterItems}
                 style={{height: 580}}
                 showsHorizontalScrollIndicator={true}
@@ -102,11 +113,13 @@ const Banklist = ({FilteredItems, setShowModal,setTypeInfo}) => {
                         marginBottom: 10,
                       }}>
                       <Image
-                        source={{uri: item.logo}}
+                        source={{
+                          uri: Title != 'Contact' ? item.logo : item.flags_uri,
+                        }}
                         style={{height: 50, width: 50}}
                       />
                       <Text style={{color: 'black', paddingLeft: 5}}>
-                        {item.bank_name}
+                        {Title != 'Contact' ? item.bank_name : item.country}
                       </Text>
                     </Pressable>
                     <View

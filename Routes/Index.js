@@ -33,30 +33,22 @@ const Index = ({AuthReducer,navigation}) => {
     GetToken();
   },[]);
   
-
+  
   return (
       <NavigationContainer>
       {AuthReducer.isloggedin  ? (
-       <BottomTab/> 
-      )     
-       :(
-        <Authstack/>   
-       )
-      }
+        <BottomTab/> 
+       )     
+       :( 
+      <Authstack/> 
+      )
+       }
       </NavigationContainer>
   );
 };
 
 const mapstatestoprops = state =>({
-
    AuthReducer:state
-  
 })
 
 export default connect(mapstatestoprops)(Index);
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

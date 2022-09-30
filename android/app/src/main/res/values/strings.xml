@@ -1,4 +1,5 @@
 <resources>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyC-A5jv5_3pskf7-_yPuFlDiBWxXQf9bYs</string>
     <string name="app_name">Brytt</string>
     <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true" translatable="false">ALWAYS_SEND</string>
     <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true" translatable="false">DO_NOT_ASK_JAVASCRIPT</string>

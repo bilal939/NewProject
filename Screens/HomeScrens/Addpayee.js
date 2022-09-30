@@ -38,6 +38,7 @@ const Addpayee = ({navigation, GetAllPayeeType, GetAllBanks, AddpayeeData}) => {
   const [Type, settype] = useState('');
   const [showModal, setShowModal] = useState(false);
   const[Typeinfo,setTypeInfo]=useState([])
+
   let userfield = '';
 
   useEffect(() => {
@@ -132,6 +133,7 @@ const Addpayee = ({navigation, GetAllPayeeType, GetAllBanks, AddpayeeData}) => {
           <Text style={{textAlign: 'center'}}>Please Wait</Text>
         </View>
       ) : (
+        null)}
         <>
           <View style={GlobalStyles.PayeeView}>
             <View style={GlobalStyles.payeeinnerView}>
@@ -203,7 +205,7 @@ const Addpayee = ({navigation, GetAllPayeeType, GetAllBanks, AddpayeeData}) => {
                     setModelItems={setModelItems}
                     Modelitems={Modelitems}
                     setTypeInfo={setTypeInfo}
-                    Typeinfo={Typeinfo}
+                    Typeinfo={Typeinfo }
                   />
                 </>
               ) : (
@@ -268,7 +270,6 @@ const Addpayee = ({navigation, GetAllPayeeType, GetAllBanks, AddpayeeData}) => {
             </View>
           </View>
         </>
-      )}
     </View>
   );
 };

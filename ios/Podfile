@@ -36,6 +36,10 @@ target 'NewProject' do
 
   pod 'appcenter-crashes', :path => '../node_modules/appcenter-crashes'
 
+  pod 'react-native-maps', :path => '../node_modules/react-native-maps'
+
+  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
+
   target 'NewProjectTests' do
     inherit! :complete
     # Pods for testing

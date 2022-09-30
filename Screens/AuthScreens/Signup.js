@@ -2,28 +2,29 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   TextInput,
   Image,
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
+import { HeightWindow } from '../DimesionsScreen/ScreenDimesnions';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {  SignupAction } from '../Actions/Action'
-const Height = Dimensions.get('window').height;
+import {SignupAction} from '../Actions/Action';
 const Globalstyle = require('../Styles/GlobalStyles');
 import {connect} from 'react-redux';
-const Signup = ({navigation, SignupAction,}) => {
 
+
+const Signup = ({navigation, SignupAction}) => {
+  
   const [Value, SetValue] = useState({Name: '', Email: '', password: ''});
   const [isValid, setvalid] = useState(false);
   const [borderColor, setbordercolor] = useState('#E2E6EB');
   const [isuppercase, setuppercase] = useState(false);
   const [isnumber, setnumber] = useState(false);
   const [isspecial, setspecial] = useState(false);
-  const[loading,setloading] = useState(false)
-  const[ErrorMessage,SeterrorMessage] = useState('')
+  const [loading, setloading] = useState(false);
+  const [ErrorMessage, SeterrorMessage] = useState('');
   const uppercase = /(?=.*[A-Z])/;
   const Numberpattern = /.*[0-9].*/;
   const specilpattern = /(?=[^#?!@$%^&*\n-]*[#?!@$%^&*-])/;
@@ -55,7 +56,7 @@ const Signup = ({navigation, SignupAction,}) => {
     }
     if (name == 'Email') {
       setbordercolor('#E2E6EB');
-      SeterrorMessage('')
+      SeterrorMessage('');
     }
   };
 
@@ -66,15 +67,20 @@ const Signup = ({navigation, SignupAction,}) => {
       if (Email != '' && EmailRegix.test(Email)) {
         if (password != '') {
           if (password.length >= 8 && uppercase.test(password)) {
-            setloading(true)
+            setloading(true);
             const User = {Name, Email, password};
-            console.log("user is",User)
             const data = await SignupAction(User);
-            if (data) {
+            setloading(false)
+            console.log("data",data)
+            if (data !== 201 ) {
               setbordercolor('red');
               setloading(false)
               SeterrorMessage(data)
-            } 
+            }
+            else {
+              alert("User Created")
+              SetValue({Name: '', Email: '', password: ''})
+            }
           } else {
             alert('Password Reqirements not full fill');
           }
@@ -88,6 +94,7 @@ const Signup = ({navigation, SignupAction,}) => {
       alert('Name cannot be empty');
     }
   };
+
   return (
     <View style={Globalstyle.Container}>
       {loading ? (
@@ -115,7 +122,9 @@ const Signup = ({navigation, SignupAction,}) => {
       <View style={styles.InputFields}>
         <View style={Globalstyle.sameInputTextView}>
           <View style={styles.ImageView}>
-            <Image source={require('/Users/Bilal/NewProject/Assets/User.png')}/>
+            <Image
+              source={require('/Users/Bilal/NewProject/Assets/User.png')}
+            />
           </View>
           <TextInput
             style={{color: 'black', width: '100%'}}
@@ -127,7 +136,9 @@ const Signup = ({navigation, SignupAction,}) => {
         </View>
         <View style={[styles.UniqueInput, {borderColor: borderColor}]}>
           <View style={styles.ImageView}>
-          <Image source={require('/Users/Bilal/NewProject/Assets/Email.png')}  /> 
+            <Image
+              source={require('/Users/Bilal/NewProject/Assets/Email.png')}
+            />
           </View>
           <TextInput
             style={{color: 'black', width: '100%'}}
@@ -140,7 +151,9 @@ const Signup = ({navigation, SignupAction,}) => {
 
         <View style={Globalstyle.sameInputTextView}>
           <View style={styles.ImageView}>
-            <Image source={require('/Users/Bilal/NewProject/Assets/Lock.png')} />
+            <Image
+              source={require('/Users/Bilal/NewProject/Assets/Lock.png')}
+            />
           </View>
           <TextInput
             placeholder="*******"
@@ -152,8 +165,9 @@ const Signup = ({navigation, SignupAction,}) => {
           />
         </View>
       </View>
-      {ErrorMessage !== '' ?
-         <Text style={Globalstyle.RequestText}>{ErrorMessage}</Text> : null}
+      {ErrorMessage !== '' ? (
+        <Text style={Globalstyle.RequestText}>{ErrorMessage}</Text>
+      ) : null}
 
       <View style={styles.ValidationText}>
         <View style={styles.ValidateView}>
@@ -207,12 +221,16 @@ const Signup = ({navigation, SignupAction,}) => {
       <Text style={Globalstyle.choice}>Or Login With</Text>
       <View style={Globalstyle.SocialLogin}>
         <TouchableOpacity style={Globalstyle.socialapps}>
-          <Image source={require('/Users/Bilal/NewProject/Assets/Facebook.png')}   />
+          <Image
+            source={require('/Users/Bilal/NewProject/Assets/Facebook.png')}
+          />
           <Text style={Globalstyle.socialText}>Login Via facebook</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[Globalstyle.socialapps, {backgroundColor: '#DE5246'}]}>
-          <Image source={require('/Users/Bilal/NewProject/Assets/Google.png')} />
+          <Image
+            source={require('/Users/Bilal/NewProject/Assets/Google.png')}
+          />
           <Text style={Globalstyle.socialText}>Login Via Google</Text>
         </TouchableOpacity>
       </View>
@@ -228,19 +246,19 @@ const Signup = ({navigation, SignupAction,}) => {
   );
 };
 
-
 export default connect(null, {SignupAction})(Signup);
 
 const styles = StyleSheet.create({
   InputFields: {
-    height: Height * 0.26,
-    backgroundColor: 'white',
+    // height: HeightWindow * 0.26,
+    marginTop:10,
+    // backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
   },
   ValidationText: {
     justifyContent: 'center',
-    height: Height * 0.12,
+    height: HeightWindow * 0.12,
     padding: 10,
     marginLeft: 10,
     marginRight: 10,
@@ -254,7 +272,7 @@ const styles = StyleSheet.create({
   },
   PassValidate: {
     color: 'black',
-    fontSize: Height * 0.016,
+    fontSize: HeightWindow * 0.016,
   },
   ValidateView: {
     flexDirection: 'row',
@@ -268,12 +286,12 @@ const styles = StyleSheet.create({
     width: '95%',
     borderWidth: 1,
     borderRadius: 10,
-    height: Height * 0.08,
+    height: HeightWindow * 0.08,
     marginBottom: 20,
   },
 
   ImageView: {
-    height: Height * 0.01,
+    height: HeightWindow * 0.01,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 5,

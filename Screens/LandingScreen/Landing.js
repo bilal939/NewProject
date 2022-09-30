@@ -8,15 +8,13 @@ import {
     ImageBackground
   } from 'react-native';
   import React from 'react';
-  import {Dimensions} from 'react-native';
-  const Width = Dimensions.get('window').width;
-  const Height = Dimensions.get('window').height;
+  import { WidthWindow } from '../DimesionsScreen/ScreenDimesnions';
+  import { HeightWindow } from '../DimesionsScreen/ScreenDimesnions';
   const Landing = ({navigation}) => {
     return (
       <View style={styles.Container}>
+        <View style={{padding:10,marginTop:20}}>
         <ImageBackground
-        resizeMode='cover'
-        styles={{paddingHorizontal:20}}
         style={styles.image1style}
         source={require('/Users/Bilal/NewProject/Assets/BackgroundImage.png')}
         >
@@ -27,6 +25,8 @@ import {
         />
       </View>
       </ImageBackground>
+        </View>
+       
       
         <View style={styles.GetStartedView}>
           <Text style={styles.GetStarted}>Let's Get Started</Text>
@@ -41,6 +41,7 @@ import {
         <View style={styles.LogoWithText}>
           <Image
             style={styles.brightLogo}
+            
             source={require('/Users/Bilal/NewProject/Assets/BryttLogo.png')}
           />
         </View>
@@ -73,86 +74,88 @@ import {
     Container: {
       flex: 1,
       backgroundColor: 'white',
+      paddingHorizontal:50,
+      paddingTop:20,
     },
     image1style: {
-      height: Height * 0.37,
       justifyContent: 'center',
       alignItems: 'center',
-      margin:20,
+      margin:10,
+      marginBottom:20
     },
     MainImage: {
-      width: Width * 0.61,
-      height: Height * 0.32,
+      width: WidthWindow * 0.5,
+      height: HeightWindow * 0.23,
     },
     TextView: {
       padding:10,
-      // backgroundColor:'red',
+      // paddingLeft:50,
+      alignItems:'center',
       justifyContent: 'center',
-      alignItems: 'center',
     },
     LogoWithText: {
-      height: Height * 0.2,
+      marginTop:20,
+      marginBottom:HeightWindow*0.05,
       justifyContent: 'center',
       alignItems: 'center',
     },
     CreateAcoountView: {
-      height: Height * 0.1,
       backgroundColor: 'white',
       justifyContent: 'center',
       alignItems: 'center',
     },
     brightLogo: {
-      height: Height * 0.061,
-      width: Width * 0.7,
+      height: HeightWindow * 0.04,
+      width: WidthWindow * 0.51,
+      
     },
     GetStartedView: {
-      height: Height * 0.08,
       justifyContent: 'center',
       alignItems: 'center',
     },
     GetStarted: {
       color: '#000000',
-      fontSize: Height * 0.05,
+      fontSize: HeightWindow * 0.028,
       fontWeight: 'bold',
-      // width:Width/0.2,
       textAlign:'center'
     },
     sametextView: {
-      fontSize: Height * 0.03,
-      fontWeight: '200',
+      marginTop:8,
+      fontSize: HeightWindow * 0.017,
+      fontWeight: '300',
       color: 'black',
     },
     LoginView: {
-      height: Height * 0.09,
-      backgroundColor: 'white',
       justifyContent: 'center',
       alignItems: 'center',
     },
     CreateAccount: {
+      marginTop:20,
       backgroundColor: '#4F44FF',
-      height: Height * 0.064,
+      height: HeightWindow * 0.055,
       justifyContent: 'center',
       alignItems: 'center',
-      width: Width * 0.8,
+      width: WidthWindow * 0.65,
       borderRadius: 25,
     },
     CreateLoginText: {
       color: 'white',
-      fontSize: Height * 0.021,
+      fontSize: HeightWindow * 0.021,
     },
     LoginButton: {
+      marginTop:20,
       backgroundColor: 'white',
-      height: Height * 0.064,
+      height: HeightWindow * 0.055,
       justifyContent: 'center',
       alignItems: 'center',
-      width: Width * 0.8,
+      width: WidthWindow * 0.65,
       borderRadius: 25,
       borderColor: '#4F44FF',
       borderWidth: 1,
     },
     Login: {
       color: '#4F44FF',
-      fontSize: Height * 0.022,
+      fontSize: HeightWindow * 0.022,
     },
   });
   

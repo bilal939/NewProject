@@ -7,7 +7,8 @@ export const ErrorColour = 'red';
 module.exports = StyleSheet.create({
   Container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor:'white'
+
     // backgroundColor: 'white',
   },
   Back: {
@@ -23,15 +24,13 @@ module.exports = StyleSheet.create({
     fontSize: Height * 0.025,
   },
   Header: {
-    height: Height * 0.2,
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     justifyContent: 'center',
   },
   HeaderText: {
-    // color:'black',
+    marginTop:20,
     color: '#1E2843',
-    // backgroundColor:'transparent',
-    fontSize: Height * 0.06,
+    fontSize: Height * 0.045,
     paddingHorizontal: 20,
   },
   ActivityIndicator: {
@@ -43,10 +42,11 @@ module.exports = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
     padding: 30,
     zIndex: 1,
+    opacity:0.9
   },
   HeaderInfo: {
     paddingHorizontal: 20,
-    fontSize: Height * 0.02,
+    fontSize: Height * 0.019,
     marginTop: 5,
     color: 'black',
     fontWeight: '100',

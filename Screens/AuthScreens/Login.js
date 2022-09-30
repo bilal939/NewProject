@@ -14,26 +14,37 @@ import {LoginAction} from '../Actions/Action';
 import Globalstyle from '../Styles/GlobalStyles';
 const Height = Dimensions.get('window').height;
 import {connect} from 'react-redux';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 
-const Login = ({navigation,LoginAction}) => {
+GoogleSignin.configure({
+  webClientId:'571200292531-be2jiqd0bmet3hacshl062k9eq9v1n70.apps.googleusercontent.com',
+  offlineAccess:false,
+    
+});
+
+const Login = ({navigation, LoginAction}) => {
+
   
-  
-  const[isloading,setloading]=useState(false)
-  const[ErrorMessage,SeterrorMessage]=useState('')
-  const[showpass,setshowpass]=useState(false)
-  const[visible , isvisible] = useState(true)
+  const [isloading, setloading] = useState(false);
+  const [ErrorMessage, SeterrorMessage] = useState('');
+  const [showpass, setshowpass] = useState(false);
+  const [visible, isvisible] = useState(true);
   const [UserField, SetUserField] = useState({Email: '', Password: ''});
-  
+
   const InputHandler = (name, value) => {
     SetUserField({
       ...UserField,
       [name]: value,
     });
-    if (name == 'Email' ) {
-      SeterrorMessage('')
+    if (name == 'Email') {
+      SeterrorMessage('');
     }
   };
- 
+
   const HandleInput = async () => {
     const EmailRegix = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     const PasswordRegix =
@@ -43,14 +54,12 @@ const Login = ({navigation,LoginAction}) => {
       if (EmailRegix.test(Email)) {
         if (Password != '') {
           if (PasswordRegix.test(Password)) {
-            setloading(true)
             const data = await LoginAction(UserField)
             if(data){
               console.log("dAT",data)
               setloading(false)
               SeterrorMessage(data)
             }
-           
           } else {
             alert('In Valid password');
           }
@@ -65,6 +74,28 @@ const Login = ({navigation,LoginAction}) => {
     }
   };
 
+  const SigninGoogle = async () => {
+    setloading(true);
+    try {
+      const Google =  await GoogleSignin.hasPlayServices();
+      console.log("google",Google)
+      const userInfo = await GoogleSignin.signIn();
+      setloading(false);
+      console.log('userinfo', userInfo);
+    } catch (error) {
+      setloading(false);
+      console.log('dtd', error);
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        SeterrorMessage('error 1', error.code);
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        SeterrorMessage('error 2', error.code);
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        SeterrorMessage('error 3', error.code);
+      } else {
+        SeterrorMessage('error 4', error.code);
+      }
+    }
+  };
 
   return (
     <View style={Globalstyle.Container}>
@@ -121,18 +152,21 @@ const Login = ({navigation,LoginAction}) => {
           />
 
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <Icon name={showpass == false ? 'eye-off' :'eye'} size={20} color={'black'} onPress={()=>{
-              isvisible(!visible)
-              setshowpass(!showpass)
-            }} />
+            <Icon
+              name={showpass == false ? 'eye-off' : 'eye'}
+              size={20}
+              color={'black'}
+              onPress={() => {
+                isvisible(!visible);
+                setshowpass(!showpass);
+              }}
+            />
           </View>
         </View>
       </View>
-      {isloading ? (
-        null
-      ) : 
-      <Text style={Globalstyle.RequestText}>{ErrorMessage}</Text>
-      }
+      {isloading ? null : (
+        <Text style={Globalstyle.RequestText}>{ErrorMessage}</Text>
+      )}
 
       <View style={Globalstyle.SubmitButtonView}>
         <TouchableOpacity
@@ -140,6 +174,15 @@ const Login = ({navigation,LoginAction}) => {
           style={Globalstyle.SubmittButton}>
           <Text style={Globalstyle.SubmittButtonText}>Login</Text>
         </TouchableOpacity>
+      </View>
+
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        <GoogleSigninButton
+          style={{width: 350, height: 60}}
+          size={GoogleSigninButton.Size.Wide}
+          color={GoogleSigninButton.Color.Dark}
+          onPress={SigninGoogle}
+        />
       </View>
 
       <View style={styles.BlankView}></View>
@@ -170,8 +213,6 @@ const Login = ({navigation,LoginAction}) => {
     </View>
   );
 };
-
-
 
 export default connect(null, {LoginAction})(Login);
 

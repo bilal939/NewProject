@@ -12,9 +12,9 @@
     <ImageView
         android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@mipmap/logo"></ImageView>
+        android:src="@mipmap/logo" />
 
     <TextView
         android:id="@+id/textView"

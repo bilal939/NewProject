@@ -4,7 +4,6 @@ import {
   View,
   TouchableOpacity,
   Dimensions,
-  Modal,
   Pressable,
   TextInput,
   Alert,
@@ -27,7 +26,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Feather';
 import Banklist from './Banklist';
 import UtilityDropDown from './UtilityDropDown';
-
+import Modal from 'react-native-modal';
 const Height = Dimensions.get('screen').height;
 const Payee = ({
   navigation,
@@ -157,7 +156,7 @@ const Payee = ({
     setModalVisible(true);
     setshowdata(item);
     }
-    else if(item.bank?.type === 'bank'){
+    else{
     SetShowUtility(false);
     console.log("Bank",item.bank?.type)
     setTypeInfo(item.bank?.bank_name);
@@ -274,6 +273,14 @@ const Payee = ({
             />
           ) : null}
           <Modal
+            style={{
+              backgroundColor: '#000000',
+              opacity: 0.9,
+              margin: 0,
+              width:'100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
             animationType="slide"
             transparent={true}
             visible={modalVisible}>
@@ -289,6 +296,7 @@ const Payee = ({
 
               {ShowUtitlity ? (
                 <>
+                
                   <Text style={styles.sameText}>Select Utility</Text>
                   <UtilityDropDown
                     setModelItems={setModelItems}
@@ -296,7 +304,6 @@ const Payee = ({
                     setTypeInfo={setTypeInfo}
                     Typeinfo={Typeinfo}
                   />
-                  
                 </>
               ) : (
                 <>
@@ -345,7 +352,7 @@ const Payee = ({
                   <Text
                     style={{
                       color: 'white',
-                      fontSize: 20,
+                      fontSize: 15,
                       fontWeight: 'bold',
                     }}>
                     Update
@@ -356,11 +363,12 @@ const Payee = ({
                   style={{
                     ...styles.Button,
                     backgroundColor: 'red',
+                    marginLeft:10
                   }}>
                   <Text
                     style={{
                       color: 'white',
-                      fontSize: 20,
+                      fontSize: 15,
                       fontWeight: 'bold',
                     }}>
                     Cancel
@@ -403,6 +411,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
   },
   modalView: {
+    position: 'absolute',
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 10,

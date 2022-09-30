@@ -14,6 +14,7 @@ const UtilityDropDown = ({Modelitems,setModelItems,setTypeInfo,Typeinfo}) => {
 
   return (
     <>
+    <View style={{width:320}}>
       <DropDownPicker
         open={Modelopen}
         value={Modelvalue}
@@ -29,6 +30,7 @@ const UtilityDropDown = ({Modelitems,setModelItems,setTypeInfo,Typeinfo}) => {
         placeholderStyle={{color: '#AAB8DB'}}
         placeholder={Typeinfo!=''?Typeinfo:'Gas, Electric, Phone....'}
         zIndex={2000}
+        
         zIndexInverse={2000}
         maxHeight={100}
         schema={{
@@ -36,6 +38,8 @@ const UtilityDropDown = ({Modelitems,setModelItems,setTypeInfo,Typeinfo}) => {
           value: 'id',
         }}
       />
+    </View>
+
     </>
   );
 };

@@ -6,11 +6,14 @@ import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import { AuthReducer } from './Screens/Actions/Reducer';
 import Index from './Routes/Index';
+
 const store = createStore(AuthReducer,  applyMiddleware(thunk));
 const App = () => {
+  
   useEffect(() => {
     SplashScreen.hide();
   }, []);
+
   return (
     <Provider store={store}>
       <View style={styles.container}>
