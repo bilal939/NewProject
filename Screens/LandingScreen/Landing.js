@@ -13,21 +13,20 @@ import {
   const Landing = ({navigation}) => {
     return (
       <View style={styles.Container}>
-        <View style={{padding:10,marginTop:20}}>
+        <View style={{padding:10,marginTop:30}}>
         <ImageBackground
+        resizeMode='contain'
         style={styles.image1style}
-        source={require('/Users/Bilal/NewProject/Assets/BackgroundImage.png')}
+        source={require('../../Assets/BackgroundImage.png')}
         >
         <View style={styles.image1style}>
         <Image
-          style={styles.MainImage}
-          source={require('/Users/Bilal/NewProject/Assets/MainImage.png')}
+          style={{height:190,width:180}}
+          source={require('../../Assets/MainImage.png')}
         />
       </View>
       </ImageBackground>
         </View>
-       
-      
         <View style={styles.GetStartedView}>
           <Text style={styles.GetStarted}>Let's Get Started</Text>
         </View>
@@ -42,7 +41,7 @@ import {
           <Image
             style={styles.brightLogo}
             
-            source={require('/Users/Bilal/NewProject/Assets/BryttLogo.png')}
+            source={require('../../Assets/BryttLogo.png')}
           />
         </View>
         <View style={styles.CreateAcoountView}>
@@ -74,18 +73,12 @@ import {
     Container: {
       flex: 1,
       backgroundColor: 'white',
-      paddingHorizontal:50,
-      paddingTop:20,
     },
     image1style: {
       justifyContent: 'center',
       alignItems: 'center',
       margin:10,
-      marginBottom:20
-    },
-    MainImage: {
-      width: WidthWindow * 0.5,
-      height: HeightWindow * 0.23,
+      marginBottom:20,
     },
     TextView: {
       padding:10,
@@ -105,9 +98,8 @@ import {
       alignItems: 'center',
     },
     brightLogo: {
-      height: HeightWindow * 0.04,
-      width: WidthWindow * 0.51,
-      
+      height: 35,
+      width: 200,
     },
     GetStartedView: {
       justifyContent: 'center',

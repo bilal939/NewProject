@@ -13,9 +13,9 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {connect} from 'react-redux';
 import { AuthReducer } from '../Actions/Reducer';
 import { ForgetPassword } from '../Actions/Action';
+import { HeightWindow, WidthWindow } from '../DimesionsScreen/ScreenDimesnions';
 const Globalstyle = require('../Styles/GlobalStyles');
-const Width = Dimensions.get('window').width;
-const Height = Dimensions.get('window').height;
+
 
 const Reset = ({navigation, ForgetPassword, AuthReducer}) => {
 
@@ -63,7 +63,7 @@ const Reset = ({navigation, ForgetPassword, AuthReducer}) => {
       <View style={styles.ResetImageView}>
         <Image
           style={styles.ResetImage}
-          source={require('/Users/Bilal/NewProject/Assets/ResetLogo.png')}/>
+          source={require('../../Assets/ResetLogo.png')}/>
         <Text style={styles.ResetPassword}>Reset Password ?</Text>
       </View>
       <View style={styles.RelatedInfo}>
@@ -82,12 +82,12 @@ const Reset = ({navigation, ForgetPassword, AuthReducer}) => {
         <View style={Globalstyle.sameInputTextView}>
           <View style={{padding: 15}}>
             <Image
-            source={require('/Users/Bilal/NewProject/Assets/Email.png')}  
+            source={require('../../Assets/Email.png')}  
           />
           </View>
           <TextInput
             style={{color: 'black', width: '100%'}}
-            placeholder="Username , Email or phone"
+            placeholder="Email"
             placeholderTextColor={'black'}
             value={Username}
             onChangeText={value => setUsername(value)}
@@ -103,7 +103,7 @@ const Reset = ({navigation, ForgetPassword, AuthReducer}) => {
         </TouchableOpacity>
       </View>
       <View style={styles.BlankView}></View>
-      <View style={Globalstyle.footer}>
+      <View style={[Globalstyle.footer,{marginBottom:20}]}>
         <Text style={Globalstyle.minifooter}>OR RETURN TO</Text>
         <Text
           style={Globalstyle.naivagetto}
@@ -135,35 +135,32 @@ export default connect(mapstatestoprops, {ForgetPassword})(Reset);
 
 const styles = StyleSheet.create({
   ResetImageView: {
-    height: Height * 0.3,
+    padding:15,
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'relative',
   },
   ResetImage: {
-    width: Width * 0.62,
-    height: Height * 0.23,
+    width: WidthWindow * 0.65,
+    height: HeightWindow * 0.22,
   },
   ResetPassword: {
+    marginTop:HeightWindow * 0.02,
     color: '#000000',
-    fontSize: Height * 0.045,
+    fontSize: HeightWindow * 0.04,
     fontWeight: 'bold',
-    position: 'absolute',
-    bottom: 25,
   },
   RelatedInfo: {
-    height: Height * 0.1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
   },
   RelatedinfoText: {
-    fontSize: Height * 0.026,
+    fontSize: HeightWindow * 0.022,
     fontWeight: '200',
     color: 'black',
   },
   InputFields: {
-    height: Height * 0.26,
+    height: HeightWindow * 0.22,
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
@@ -171,14 +168,15 @@ const styles = StyleSheet.create({
   },
 
   submittView: {
-    height: Height * 0.1,
+    height: HeightWindow * 0.1,
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
   },
   submitt: {
     backgroundColor: '#6153C3',
-    height: Height * 0.08,
+    paddingVertical:15,
+    paddingHorizontal:10,
     justifyContent: 'center',
     alignItems: 'center',
     width: '95%',
@@ -186,9 +184,9 @@ const styles = StyleSheet.create({
   },
   submittText: {
     color: 'white',
-    fontSize: Height * 0.03,
+    fontSize: HeightWindow * 0.023,
   },
   BlankView: {
-    height: Height * 0.12,
+    height: HeightWindow * 0.05,
   },
 });

@@ -123,7 +123,7 @@ const Signup = ({navigation, SignupAction}) => {
         <View style={Globalstyle.sameInputTextView}>
           <View style={styles.ImageView}>
             <Image
-              source={require('/Users/Bilal/NewProject/Assets/User.png')}
+              source={require('../../Assets/User.png')}
             />
           </View>
           <TextInput
@@ -137,7 +137,7 @@ const Signup = ({navigation, SignupAction}) => {
         <View style={[styles.UniqueInput, {borderColor: borderColor}]}>
           <View style={styles.ImageView}>
             <Image
-              source={require('/Users/Bilal/NewProject/Assets/Email.png')}
+              source={require('../../Assets/Email.png')}
             />
           </View>
           <TextInput
@@ -152,7 +152,7 @@ const Signup = ({navigation, SignupAction}) => {
         <View style={Globalstyle.sameInputTextView}>
           <View style={styles.ImageView}>
             <Image
-              source={require('/Users/Bilal/NewProject/Assets/Lock.png')}
+              source={require('../../Assets/Lock.png')}
             />
           </View>
           <TextInput
@@ -222,14 +222,14 @@ const Signup = ({navigation, SignupAction}) => {
       <View style={Globalstyle.SocialLogin}>
         <TouchableOpacity style={Globalstyle.socialapps}>
           <Image
-            source={require('/Users/Bilal/NewProject/Assets/Facebook.png')}
+            source={require('../../Assets/Facebook.png')}
           />
           <Text style={Globalstyle.socialText}>Login Via facebook</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[Globalstyle.socialapps, {backgroundColor: '#DE5246'}]}>
           <Image
-            source={require('/Users/Bilal/NewProject/Assets/Google.png')}
+            source={require('../../Assets/Google.png')}
           />
           <Text style={Globalstyle.socialText}>Login Via Google</Text>
         </TouchableOpacity>

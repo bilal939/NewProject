@@ -10,27 +10,20 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome5';
+import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 import {LoginAction} from '../Actions/Action';
 import Globalstyle from '../Styles/GlobalStyles';
 const Height = Dimensions.get('window').height;
 import {connect} from 'react-redux';
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
+import { HeightWindow } from '../DimesionsScreen/ScreenDimesnions';
 
-GoogleSignin.configure({
-  webClientId:'571200292531-be2jiqd0bmet3hacshl062k9eq9v1n70.apps.googleusercontent.com',
-  offlineAccess:false,
-    
-});
 
 const Login = ({navigation, LoginAction}) => {
 
   
   const [isloading, setloading] = useState(false);
-  const [ErrorMessage, SeterrorMessage] = useState('');
+  const [ErrorMessage, SeterrorMessage] = useState(null);
   const [showpass, setshowpass] = useState(false);
   const [visible, isvisible] = useState(true);
   const [UserField, SetUserField] = useState({Email: '', Password: ''});
@@ -54,11 +47,16 @@ const Login = ({navigation, LoginAction}) => {
       if (EmailRegix.test(Email)) {
         if (Password != '') {
           if (PasswordRegix.test(Password)) {
+            setloading(true)
             const data = await LoginAction(UserField)
-            if(data){
+            console.log("data",data)
+            if(data !== undefined){
               console.log("dAT",data)
               setloading(false)
               SeterrorMessage(data)
+            }
+            else {
+              alert("Network Request Failed")
             }
           } else {
             alert('In Valid password');
@@ -74,31 +72,11 @@ const Login = ({navigation, LoginAction}) => {
     }
   };
 
-  const SigninGoogle = async () => {
-    setloading(true);
-    try {
-      const Google =  await GoogleSignin.hasPlayServices();
-      console.log("google",Google)
-      const userInfo = await GoogleSignin.signIn();
-      setloading(false);
-      console.log('userinfo', userInfo);
-    } catch (error) {
-      setloading(false);
-      console.log('dtd', error);
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        SeterrorMessage('error 1', error.code);
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        SeterrorMessage('error 2', error.code);
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        SeterrorMessage('error 3', error.code);
-      } else {
-        SeterrorMessage('error 4', error.code);
-      }
-    }
-  };
+  
+  
 
   return (
-    <View style={Globalstyle.Container}>
+    <View style={[Globalstyle.Container,{paddingHorizontal:10}]}>
       {isloading ? (
         <View style={Globalstyle.ActivityIndicator}>
           <ActivityIndicator size={20} color={'black'} />
@@ -116,17 +94,15 @@ const Login = ({navigation, LoginAction}) => {
         />
         <Text style={Globalstyle.BackText}>Back</Text>
       </View>
-      <View style={Globalstyle.Header}>
+      <View style={[Globalstyle.Header,{marginTop:HeightWindow*0.08}]}>
         <Text style={Globalstyle.HeaderText}>Login</Text>
         <Text style={Globalstyle.HeaderInfo}>Enter Your Login info</Text>
       </View>
 
       <View style={styles.InputFields}>
         <View style={Globalstyle.sameInputTextView}>
-          <View style={{padding: 15}}>
-            <Image
-              source={require('/Users/Bilal/NewProject/Assets/Email.png')}
-            />
+          <View style={{padding: 10}}>
+            <FontAwesome name='user' size={18} color={'black'}/>
           </View>
           <TextInput
             style={{color: 'black', width: '100%'}}
@@ -137,10 +113,8 @@ const Login = ({navigation, LoginAction}) => {
           />
         </View>
         <View style={Globalstyle.sameInputTextView}>
-          <View style={{padding: 15}}>
-            <Image
-              source={require('/Users/Bilal/NewProject/Assets/Lock.png')}
-            />
+          <View style={{padding: 10}}>
+           <SimpleLineIcon name='lock' size={18} color={'black'}/>
           </View>
           <TextInput
             style={{color: 'black', width: '75%'}}
@@ -164,9 +138,9 @@ const Login = ({navigation, LoginAction}) => {
           </View>
         </View>
       </View>
-      {isloading ? null : (
+      {ErrorMessage != null ? (
         <Text style={Globalstyle.RequestText}>{ErrorMessage}</Text>
-      )}
+      ):null}
 
       <View style={Globalstyle.SubmitButtonView}>
         <TouchableOpacity
@@ -176,29 +150,18 @@ const Login = ({navigation, LoginAction}) => {
         </TouchableOpacity>
       </View>
 
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
-        <GoogleSigninButton
-          style={{width: 350, height: 60}}
-          size={GoogleSigninButton.Size.Wide}
-          color={GoogleSigninButton.Color.Dark}
-          onPress={SigninGoogle}
-        />
-      </View>
+     
 
       <View style={styles.BlankView}></View>
       <Text style={Globalstyle.choice}>Or Login With</Text>
       <View style={Globalstyle.SocialLogin}>
         <TouchableOpacity style={Globalstyle.socialapps}>
-          <Image
-            source={require('/Users/Bilal/NewProject/Assets/Facebook.png')}
-          />
+          <FontAwesome name='facebook' size={20} color={'white'}/>
           <Text style={Globalstyle.socialText}>Login Via facebook</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[Globalstyle.socialapps, {backgroundColor: '#DE5246'}]}>
-          <Image
-            source={require('/Users/Bilal/NewProject/Assets/Google.png')}
-          />
+          <FontAwesome name='google' size={20} color={'white'}/>
           <Text style={Globalstyle.socialText}>Login Via Google</Text>
         </TouchableOpacity>
       </View>
@@ -225,6 +188,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
   BlankView: {
-    height: Height * 0.14,
+    height: Height * 0.05,
   },
 });

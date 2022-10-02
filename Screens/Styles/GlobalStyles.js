@@ -1,18 +1,20 @@
 import {StyleSheet, Dimensions} from 'react-native';
-const Height = Dimensions.get('window').height;
-const Width = Dimensions.get('window').width;
-export const buttonColour = '#6153C3';
-export const initialcolor = 'white';
-export const ErrorColour = 'red';
+import { WidthWindow } from '../DimesionsScreen/ScreenDimesnions';
+import { HeightWindow } from '../DimesionsScreen/ScreenDimesnions';
+export const Colours = {
+    buttonColour : '#665abc',
+   initialcolor :'white',
+   ErrorColour : 'red'
+}
+
 module.exports = StyleSheet.create({
   Container: {
     flex: 1,
-    backgroundColor:'white'
-
-    // backgroundColor: 'white',
+    backgroundColor:'white',
+    paddingHorizontal:15
   },
   Back: {
-    height: Height * 0.05,
+    HeightWindow: HeightWindow * 0.05,
     flexDirection: 'row',
     alignItems: 'center',
     paddingTop: 8,
@@ -21,22 +23,23 @@ module.exports = StyleSheet.create({
   BackText: {
     color: '#444555',
     paddingLeft: 5,
-    fontSize: Height * 0.025,
+    fontSize: HeightWindow * 0.025,
   },
   Header: {
     // backgroundColor: 'white',
     justifyContent: 'center',
+    marginBottom:20
   },
   HeaderText: {
     marginTop:20,
     color: '#1E2843',
-    fontSize: Height * 0.045,
+    fontSize: HeightWindow * 0.045,
     paddingHorizontal: 20,
   },
   ActivityIndicator: {
     alignSelf: 'center',
-    width: Width,
-    height: Height,
+    width: WidthWindow,
+    HeightWindow: HeightWindow,
     position: 'absolute',
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0.5)',
@@ -46,20 +49,20 @@ module.exports = StyleSheet.create({
   },
   HeaderInfo: {
     paddingHorizontal: 20,
-    fontSize: Height * 0.019,
+    fontSize: HeightWindow * 0.019,
     marginTop: 5,
     color: 'black',
     fontWeight: '100',
   },
   SubmitButtonView: {
-    height: Height * 0.1,
+    height: HeightWindow * 0.1,
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
   },
   SubmittButton: {
-    backgroundColor: buttonColour,
-    height: Height * 0.076,
+    backgroundColor:  Colours.buttonColour,
+    height: HeightWindow * 0.065,
     justifyContent: 'center',
     alignItems: 'center',
     width: '95%',
@@ -67,17 +70,17 @@ module.exports = StyleSheet.create({
   },
   SubmittButtonText: {
     color: 'white',
-    fontSize: Height * 0.027,
+    fontSize: HeightWindow * 0.027,
   },
   choice: {
-    fontSize: Height * 0.025,
+    fontSize: HeightWindow * 0.025,
     color: '#A1A6B3',
     textAlign: 'center',
     fontWeight: '300',
     textTransform: 'uppercase',
   },
   SocialLogin: {
-    height: Height * 0.13,
+    height: HeightWindow * 0.13,
     alignItems: 'center',
     justifyContent: 'space-evenly',
     marginTop: 10,
@@ -86,8 +89,8 @@ module.exports = StyleSheet.create({
   },
   socialapps: {
     backgroundColor: '#3E89FB',
-    width: Width * 0.45,
-    height: Height * 0.1,
+    paddingVertical:12,
+    paddingHorizontal:18,
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderRadius: 10,
@@ -95,10 +98,10 @@ module.exports = StyleSheet.create({
   },
   socialText: {
     color: 'white',
-    fontSize: Height * 0.02,
+    paddingLeft:5,
+    fontSize: HeightWindow * 0.016,
   },
   footer: {
-    height: Height * 0.05,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -106,64 +109,63 @@ module.exports = StyleSheet.create({
   naivagetto: {
     paddingLeft: 20,
     color: '#6153C3',
-    fontSize: Height * 0.025,
+    fontSize: HeightWindow * 0.025,
   },
   sameInputTextView: {
     flexDirection: 'row',
-    padding: 8,
+    padding: 3,
     alignItems: 'center',
     width: '95%',
     borderColor: '#E2E6EB',
     borderWidth: 1,
     borderRadius: 10,
-    height: Height * 0.08,
     marginBottom: 18,
   },
   minifooter: {
     color: '#A1A6B3',
-    fontSize: Height * 0.025,
+    fontSize: HeightWindow * 0.025,
   },
 
   RequestText: {
     color: 'red',
     paddingLeft: 20,
-    fontSize: Height * 0.024,
+    fontSize: HeightWindow * 0.024,
     marginTop: 3,
   },
   header: {
-    backgroundColor: buttonColour,
+    backgroundColor: Colours.buttonColour,
     justifyContent: 'center',
     alignItems: 'center',
-    height: Height * 0.08,
+    HeightWindow: HeightWindow * 0.08,
   },
   Payee: {
     color: 'white',
-    fontSize: Height * 0.03,
+    fontSize: HeightWindow * 0.03,
   },
   PayeeView: {
     backgroundColor: '#6153C3',
-    height: Height * 0.08,
+    HeightWindow: HeightWindow * 0.08,
     justifyContent: 'center',
   },
   payeeinnerView: {
     flexDirection: 'row',
-    width: Width * 0.2,
+    width: WidthWindow * 0.2,
     alignItems: 'center',
     paddingLeft: 5,
   },
   addpayeeBackText: {
     color: 'white',
-    fontSize: Height * 0.024,
+    fontSize: HeightWindow * 0.024,
     paddingLeft: 5,
   },
   addPayeeView: {
     color: 'black',
-    width: Width * 0.7,
+    width: WidthWindow * 0.7,
     justifyContent: 'center',
     alignItems: 'center',
   },
   addPayeText: {
     color: 'white',
-    fontSize: Height * 0.03,
+    fontSize: HeightWindow * 0.03,
   },
 });

@@ -27,6 +27,7 @@ export const SignupAction = User => async dispatch => {
       }
     });
   } catch (error) {
+    console.log(error);
     return error;
   }
 };
@@ -64,7 +65,7 @@ export const LoginAction = User => async dispatch => {
     });
   } catch (error) {
     console.log('cache me aya');
-    return error;
+    return error.TypeError;
   }
 };
 
