@@ -3,7 +3,6 @@ import {GetToken} from '../../Asynchronous Storage/AsynchronousStorage';
 import * as actionTypes from './Actiontypes';
 
 export const SignupAction = User => async dispatch => {
-  console.log("signup",User)
   try {
     return await fetch(actionTypes.SignupUrl, {
       method: 'POST',

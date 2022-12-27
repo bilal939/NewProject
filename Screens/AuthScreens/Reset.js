@@ -103,7 +103,7 @@ const Reset = ({navigation, ForgetPassword, AuthReducer}) => {
         </TouchableOpacity>
       </View>
       <View style={styles.BlankView}></View>
-      <View style={[Globalstyle.footer,{marginBottom:20}]}>
+      <View style={[Globalstyle.footer,{marginBottom:20 }]}>
         <Text style={Globalstyle.minifooter}>OR RETURN TO</Text>
         <Text
           style={Globalstyle.naivagetto}

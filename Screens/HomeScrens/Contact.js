@@ -196,17 +196,6 @@ const Contact = ({
     console.log('item to edit', item);
     setUpdateModal(true);
 
-    // setshowdata({
-    //   // id:item.id,
-    //   full_name: item.full_name,
-    //   email: item.email,
-    //   phone_no: item.phone_no,
-    // });
-//     setshowdata({...showdata, ,       full_name: item.full_name,
-//       email: item.email,
-//       phone_no: item.phone_no,
-// });
-
     setshowdata(item);
     console.log(item.id, showdata.id, "asdasdasasad")
   };
